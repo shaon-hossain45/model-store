@@ -29,4 +29,39 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	// Search Close Button
+	document.addEventListener('DOMContentLoaded', function() {
+		const searchInput = document.getElementById('search-input');
+		const clearSearchBtn = document.getElementById('close');
+	 
+		// Function to toggle the clear button based on search input value and focus
+		function toggleClearButtonVisibility() {
+			const hasValue = searchInput.value.trim() !== '';
+			const isFocused = document.activeElement === searchInput;
+	
+			clearSearchBtn.style.display = (hasValue || isFocused) ? 'block' : 'none';
+		}
+
+		// Event listener for search input changes
+		searchInput.addEventListener('input', toggleClearButtonVisibility);
+
+		// Event listener for input focus
+		searchInput.addEventListener('focus', toggleClearButtonVisibility);
+	
+		// Event listener for input blur (when focus is lost)
+		searchInput.addEventListener('blur', toggleClearButtonVisibility);
+
+		// Event listener for the clear button
+		clearSearchBtn.addEventListener('click', function() {
+			// Reset the search input value
+			searchInput.value = '';
+
+			toggleClearButtonVisibility();
+	
+			// Clear the search results (optional)
+			//const searchResults = document.getElementById('search-results');
+			//searchResults.innerHTML = '';
+		});
+	});
+	
 })( jQuery );

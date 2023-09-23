@@ -52,6 +52,35 @@ class Model_Store_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		$this->public_load_dependencies();
+		if ( class_exists( 'Model_Store_Public_Display' ) ) {
+			new Model_Store_Public_Display();
+		}
+
+	}
+
+	/**
+	 * Load the required dependencies for this plugin.
+	 *
+	 * Include the following files that make up the plugin:
+	 *
+	 * - Public_Popularity_Loader. Orchestrates the hooks of the plugin.
+	 * - Public_Popularity_i18n. Defines internationalization functionality.
+	 * - Public_Popularity_Admin. Defines all hooks for the admin area.
+	 * - Public_Popularity_Public. Defines all hooks for the public side of the site.
+	 *
+	 * Create an instance of the loader which will be used to register the hooks
+	 * with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function public_load_dependencies() {
+		/**
+		 * The class responsible for orchestrating the actions and filters of the
+		 * core plugin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/model-store-public-display.php';
 	}
 
 	/**
@@ -72,7 +101,8 @@ class Model_Store_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		
+		wp_enqueue_style( 'awesome-icons', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-public.css', array(), $this->version, 'all' );
 
 	}
@@ -96,8 +126,16 @@ class Model_Store_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'jQuery', plugin_dir_url( __FILE__ ) . 'js/vendor/jquery-3.7.1.min.js', array( '' ), '3.7.1', true );
 
+		if (is_singular() && has_shortcode(get_post()->post_content, 'model_search')) {
+			wp_enqueue_script( 'model-search', plugin_dir_url( __FILE__ ) . 'js/model-search.js', array( 'jquery' ), null, true );
+		}
+		// Localize the script to pass PHP data to JavaScript
+		$search_ajax_nonce = wp_create_nonce( 'search_nonce_key' );
+		wp_localize_script( 'model-search', 'search_object', array('ajax_url' => admin_url('admin-ajax.php'), 'action' => 'search_ajax_action', 'security' => $search_ajax_nonce) );
+		
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-public.js', array( 'jquery' ), $this->version, false );
 	}
 
 }
