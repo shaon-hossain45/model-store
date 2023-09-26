@@ -36,7 +36,6 @@ if ( ! class_exists( 'modelBase' ) ) {
 			// The Loop
 			if ( $the_query->have_posts() ) {
 				$output .= '<div class="model-container">
-				<div class="preloader-container d-none"><span class="preloader"></span></div>
 				<div class="owl-carousel">
 				<ul class="splide__list">';
 				
@@ -126,6 +125,8 @@ if ( ! class_exists( 'modelBase' ) ) {
 				</form>
 			</div>
 		</div>';
+
+		$output .= '<div class="search-modal"><div class="modal-content"><div class="preloader-container d-none"><span class="preloader"></span></div><span class="close">&times;</span><div class="search-results"></div></div></div>';
 
 			// Output needs to be return
 			return $output;

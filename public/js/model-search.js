@@ -31,6 +31,31 @@
 
     $(document).ready(function() {
 
+
+        /**
+         * Search modal close action
+         * Modal active event
+         * By Javascript EventListener
+         */
+
+        const closeModal = document.querySelector('.close');
+        const searchModal = $(".search-modal");
+            
+        function closeFuncModal(){
+            // Close the modal when the close button is clicked
+            closeModal.addEventListener('click', function() {
+                searchModal.css("display", "none");
+            });
+
+            // Close the modal when the user clicks outside the modal
+            window.addEventListener('click', function(event) {
+                if (event.target === searchModal[0]) {
+                    searchModal.css("display", "none");
+                }
+            });
+        }
+
+
         var isSearchValid = true;
         
         // AJAX request on page load
@@ -81,12 +106,15 @@
                         // Handle the AJAX response here
                         //console.log(response);
                         if (response["data"]["exists"]["updated"] == "success") {
-                            $(".model-container").html(response["data"]['output']);
+                            // Display the modal
+                            $(".search-modal").css("display", "block");
+                            $(".search-results").html(response["data"]['output']);
                         }
                     },
                     complete: function(xhr, textStatus) {
                         // Set an initial width
                         loader.addClass("d-none");
+                        closeFuncModal();
                     },
                     error: function(error) {
                         // Handle any errors
@@ -96,5 +124,6 @@
 
             }
         });
+
     });
 })( jQuery );
