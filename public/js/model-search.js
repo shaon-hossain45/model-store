@@ -39,7 +39,7 @@
          */
 
         const closeModal = document.querySelector('.close');
-        const searchModal = $(".search-modal");
+        const searchModal = $(".model-modal");
             
         function closeFuncModal(){
             // Close the modal when the close button is clicked
@@ -107,7 +107,7 @@
                         //console.log(response);
                         if (response["data"]["exists"]["updated"] == "success") {
                             // Display the modal
-                            $(".search-modal").css("display", "block");
+                            $(".model-modal").css("display", "block");
                             $(".search-results").html(response["data"]['output']);
                         }
                     },

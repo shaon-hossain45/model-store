@@ -88,7 +88,7 @@ class Model_Store_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles($hook) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -103,7 +103,10 @@ class Model_Store_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-admin.css', array(), $this->version, 'all' );
-
+		
+		if ($hook === 'model-store-settings') {
+			wp_enqueue_style('modal-store-settings-css', plugin_dir_url( __FILE__ ) . '/css/model-settings.css', array(), null, 'all');
+		}
 	}
 
 	/**
@@ -111,7 +114,7 @@ class Model_Store_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts($hook) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -126,7 +129,10 @@ class Model_Store_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-admin.js', array( 'jquery' ), $this->version, false );
-
+		
+		if ($hook === 'modal-store-settings') {
+			wp_enqueue_script( 'model-store-settings-js', plugin_dir_url( __FILE__ ) . 'js/model-settings.js', array( 'jquery' ), null, true );
+		}
 	}
 
 }

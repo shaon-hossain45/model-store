@@ -25,6 +25,10 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			
 			// hook into the init action and call create_book_taxonomies when it fires
 			add_action( 'init', array( $this, 'wpdocs_create_book_taxonomies' ), 0 );
+
+			add_action('admin_menu', array( $this, 'add_submenu_page_for_custom_post_type') );
+			// register wordpress default setting fileds
+			add_action('admin_init', array( $this, 'register_model_store_settings') );
 		}
 
 		// Register Custom Post Type
@@ -145,6 +149,119 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			);
 
 			register_taxonomy( 'model_tag', 'model_store', $args );
+		}
+
+		// Model store submenu page like settings
+		function add_submenu_page_for_custom_post_type() {
+			add_submenu_page(
+				'edit.php?post_type=model_store', // Parent slug (custom post type)
+				'Settings', // Page title
+				'Settings', // Menu title
+				'manage_options', // Capability
+				'model-store-settings', // Menu slug
+				array( $this, 'render_model_store_settings_callback' ) // Callback function to render the page
+			);
+		}
+		
+		// Render callback of settings page
+		function render_model_store_settings_callback() {
+			// Retrieve any saved settings data
+			$saved_enable_feature = get_option('model_store_enable_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_enable_feature === false) {
+				$saved_enable_feature = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_title = get_option('model_store_title');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_title === false) {
+				$saved_title = "View All Model Store"; // Set it to 1 (checked) by default
+			}
+			$saved_url = get_option('model_store_url');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_url === false) {
+				$saved_url = home_url("/"); // Set it to 1 (checked) by default
+			}
+
+			// Extra Buttons
+			$saved_like_feature = get_option('model_store_like_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_like_feature === false) {
+				$saved_like_feature = 1; // Set it to 1 (checked) by default
+			}
+			$saved_collect_feature = get_option('model_store_collect_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_collect_feature === false) {
+				$saved_collect_feature = 1; // Set it to 1 (checked) by default
+			}
+			
+			// Check if the settings have been saved and display a success notice
+			if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
+				add_settings_error('model_store_settings_messages', 'settings_saved', __('Settings saved.', 'model-store'), 'updated');
+			}
+
+			echo '<div class="wrap">';
+			echo '<h1>Model Store Settings</h1>';
+
+			// Display any settings error messages
+			settings_errors('model_store_settings_messages');
+
+			echo '<form method="post" action="options.php">';
+			settings_fields('model_store_settings_group');
+			// Start settings field parts with table
+			echo '<table class="form-table" role="presentation">
+				<tbody>
+					<tr>
+						<th scope="row"><label for="model_store_like_feature">Model Like Button</th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Like Button</span></legend>
+								<label for="model_store_like_feature"><input type="checkbox" id="model_store_like_feature" name="model_store_like_feature" value="1" ' . checked($saved_like_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_collect_feature">Model Collect Button</th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Collect Button</span></legend>
+								<label for="model_store_collect_feature"><input type="checkbox" id="model_store_collect_feature" name="model_store_collect_feature" value="1" ' . checked($saved_collect_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr><th scope="row"><hr></th><td><hr></td></tr>
+					<tr>
+						<th scope="row"><label for="model_store_enable_feature">Model Store Button</th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Store Button</span></legend>
+								<label for="model_store_enable_feature"><input type="checkbox" id="model_store_enable_feature" name="model_store_enable_feature" value="1" ' . checked($saved_enable_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_title">Model Store Title:</label></th>
+						<td><input type="text" id="model_store_title" name="model_store_title" value="' . esc_attr($saved_title) . '" class="regular-text" /><br /></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_url">Model Store Location:</label></th>
+						<td><input type="url" id="model_store_url" name="model_store_url" value="' . esc_attr($saved_url) . '" class="regular-text code" /><br /><p class="description">Enter the URL for your model store link.</p></td>
+					</tr>
+				</tbody>
+			</table>';
+			// End settings field parts with table
+			submit_button('Save Settings');
+			echo '</form>';
+			echo '</div>';
+		}
+
+		function register_model_store_settings() {
+			register_setting('model_store_settings_group', 'model_store_enable_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_title', 'sanitize_text_field');
+			register_setting('model_store_settings_group', 'model_store_url', 'esc_url_raw');
+			// Extra Buttons
+			register_setting('model_store_settings_group', 'model_store_like_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_collect_feature', 'absint');
 		}
 
 	}

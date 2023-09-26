@@ -45,6 +45,19 @@ if ( ! class_exists( 'searchStore' ) ) {
             // String to array
             parse_str( $_POST['values'], $itechArray );
 
+			// Extra Buttons
+			$saved_like_feature = get_option('model_store_like_feature');
+			$saved_collect_feature = get_option('model_store_collect_feature');
+
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_like_feature === false) {
+				$saved_like_feature = 1; // Set it to 1 (checked) by default
+			}
+
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_collect_feature === false) {
+				$saved_collect_feature = 1; // Set it to 1 (checked) by default
+			}
 
             $output = '';
             $response = array();
@@ -106,10 +119,15 @@ if ( ! class_exists( 'searchStore' ) ) {
 									<div class="model-category">' . implode(' | ', $category_links) . '</div>
 									<div class="print-extra">
 										<ul>
-											<li><a href=""><i class="fa-solid fa-download"></i><span>5025</span></a></li>
-											<li><a href=""><i class="fa-regular fa-heart"></i></a></li>
-											<li><a href=""><i class="fa-solid fa-plus"></i><span>Collect</span></a></li>
-										</ul>
+											<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											if($saved_like_feature == 1){
+												 // Display the modal
+												$output .= '<li><a href=""><i class="fa-regular fa-heart"></i></a></li>';
+											}
+											if($saved_collect_feature == 1){
+												$output .= '<li><a href=""><i class="fa-solid fa-plus"></i><span>Collect</span></a></li>';
+											}
+										$output .= '</ul>
 									</div>
 								</div>
 							</div>

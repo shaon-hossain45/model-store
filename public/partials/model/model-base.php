@@ -21,6 +21,21 @@ if ( ! class_exists( 'modelBase' ) ) {
 		 * @return void
 		 */
 		public function model_store_shortcode() {
+
+			// Extra Buttons
+			$saved_like_feature = get_option('model_store_like_feature');
+			$saved_collect_feature = get_option('model_store_collect_feature');
+
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_like_feature === false) {
+				$saved_like_feature = 1; // Set it to 1 (checked) by default
+			}
+			
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_collect_feature === false) {
+				$saved_collect_feature = 1; // Set it to 1 (checked) by default
+			}
+
 			$output = '';
 
 			$args = array(
@@ -80,10 +95,15 @@ if ( ! class_exists( 'modelBase' ) ) {
 									<div class="model-category">' . implode(' | ', $category_links) . '</div>
 									<div class="print-extra">
 										<ul>
-											<li><a href=""><i class="fa-solid fa-download"></i><span>5025</span></a></li>
-											<li><a href=""><i class="fa-regular fa-heart"></i></a></li>
-											<li><a href=""><i class="fa-solid fa-plus"></i><span>Collect</span></a></li>
-										</ul>
+											<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											if($saved_like_feature == 1){
+												 // Display the modal
+												$output .= '<li><a href=""><i class="fa-regular fa-heart"></i></a></li>';
+											}
+											if($saved_collect_feature == 1){
+												$output .= '<li><a href=""><i class="fa-solid fa-plus"></i><span>Collect</span></a></li>';
+											}
+										$output .= '</ul>
 									</div>
 								</div>
 							</div>
@@ -112,6 +132,24 @@ if ( ! class_exists( 'modelBase' ) ) {
 		 * @return void
 		 */
 		public function model_search_shortcode() {
+			// Store Button
+			$saved_enable_feature = get_option('model_store_enable_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_enable_feature === false) {
+				$saved_enable_feature = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_title = get_option('model_store_title');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_title === false) {
+				$saved_title = "View All Model Store"; // Set it to 1 (checked) by default
+			}
+			$get_store_location_url = get_option('model_store_url');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($get_store_location_url === false) {
+				$get_store_location_url = home_url("/"); // Set it to 1 (checked) by default
+			}
+			
 			$output = '';
 
 			$output .= '<div class="dashboard-main">
@@ -123,10 +161,13 @@ if ( ! class_exists( 'modelBase' ) ) {
 					</div>
 					<button type="submit" name="search">Search</button>
 				</form>
-			</div>
-		</div>';
+			</div>';
+			if($saved_enable_feature == 1){
+				$output .= '<a href="'.$get_store_location_url.'" class="store-btn">'.$saved_title.'</a>';
+			}
+			$output .= '</div>';
 
-		$output .= '<div class="search-modal"><div class="modal-content"><div class="preloader-container d-none"><span class="preloader"></span></div><span class="close">&times;</span><div class="search-results"></div></div></div>';
+		$output .= '<div class="model-modal"><div class="modal-content"><div class="preloader-container d-none"><span class="preloader"></span></div><span class="close">&times;</span><div class="search-results"></div></div></div>';
 
 			// Output needs to be return
 			return $output;
