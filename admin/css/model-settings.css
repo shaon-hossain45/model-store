@@ -32,3 +32,14 @@
     border-color: #2271b1;
     color: #fff;
 }
+
+.form-table td .model-alignment .breakpoint-part{
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+.form-table td .model-alignment .breakpoint-part:first-child{
+    margin-left: 0px;
+}
+.form-table td .model-alignment .breakpoint-part:last-child{
+    margin-right: 0px;
+}

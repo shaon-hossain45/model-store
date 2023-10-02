@@ -1,18 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    var sliderPerview = document.querySelector('.swiper').getAttribute('data-perview');
+    var sliderBreakpoint = document.querySelector('.swiper').getAttribute('data-breakpoint');
+
+    var sliderBreakPhone = document.querySelector('.swiper').getAttribute('data-breakphone');
+    var sliderBreakTablet = document.querySelector('.swiper').getAttribute('data-breaktablet');
+    var sliderBreakDesktop = document.querySelector('.swiper').getAttribute('data-breakdesktop');
+    var sliderBreakLargeScreen = document.querySelector('.swiper').getAttribute('data-breaklargescreen');
+
+
     var sliderSpeed = document.querySelector('.swiper').getAttribute('data-speed');
     var sliderNav = document.querySelector('.swiper').getAttribute('data-navigation');
     var sliderPag = document.querySelector('.swiper').getAttribute('data-pagination');
     var sliderAutoplay = document.querySelector('.swiper').getAttribute('data-autoplay');
+    var sliderAutoplayDelay = document.querySelector('.swiper').getAttribute('data-autoplay-delay');
+    var sliderLoop = document.querySelector('.swiper').getAttribute('data-loop');
     
     var swiper = new Swiper(".swiper", {
-        slidesPerView: 1,
+        slidesPerView: (sliderBreakpoint == 1) ? 1 : sliderPerview,
         spaceBetween: 15,
         speed: parseInt(sliderSpeed),
-        loop: true,
+        loop: (sliderLoop == 1) ? true : false,
         // centeredSlides: true,
         autoplay: sliderAutoplay == 1 ? {
-            delay: 1500,
+            delay: sliderAutoplayDelay,
             // pauseOnMouseEnter: true,
             disableOnInteraction: false, // Enable autoplay even on slider interaction (dragging)
         } : false, //ShortenMode by Javascript
@@ -31,32 +42,33 @@ document.addEventListener('DOMContentLoaded', function() {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
         },
-        breakpoints: {
+        breakpoints: sliderBreakpoint == 1 ? {
+            // when window width is >= 0px
+            0: {
+                slidesPerView: sliderBreakPhone,
+            },
             // when window width is >= 768px
             768: {
-            slidesPerView: 2,
-            spaceBetween: 15,
+                slidesPerView: sliderBreakTablet,
             },
             // when window width is >= 922px
             922: {
-            slidesPerView: 3,
-            spaceBetween: 15,
+                slidesPerView: sliderBreakDesktop,
             },
             // when window width is >= 922px
             1600: {
-                slidesPerView: 4,
-                spaceBetween: 15,
+                slidesPerView: sliderBreakLargeScreen,
             },
+        } : false, //ShortenMode by Javascript,
+        effect: 'coverflow',
+        coverflowEffect: {
+            rotate: 30,
+            slideShadows: true,
         },
-        // effect: 'coverflow',
-        // coverflowEffect: {
-        //     rotate: 30,
-        //     slideShadows: false,
+        // keyboard: {
+        //     enabled: true,
+        //     onlyInViewport: false,
         // },
-        keyboard: {
-            enabled: true,
-            onlyInViewport: false,
-        },
         // mousewheel: {
         //     invert: true,
         //     forceToAxis: true,

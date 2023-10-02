@@ -231,6 +231,53 @@ if ( ! class_exists( 'modelBase' ) ) {
 				$saved_autoplay_feature = 0; // Set it to 1500 by default
 			}
 
+			$saved_slider_autoplay_delay = get_option('model_store_slider_autoplay_delay');
+			if ($saved_slider_autoplay_delay === false) {
+				$saved_slider_autoplay_delay = 1500; // Set it to 1500 by default
+			}
+
+			$saved_loop_feature = get_option('model_store_loop_feature');
+			if ($saved_loop_feature === false) {
+				$saved_loop_feature = 0; // Set it to 1500 by default
+			}
+
+			$saved_select_slider_number = get_option('model_store_slider_number');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_slider_number === false) {
+				$saved_select_slider_number = 3; // Set it to 3 (checked) by default
+			}
+
+			$saved_breakpoint_feature = get_option('model_store_breakpoint_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_breakpoint_feature === false) {
+				$saved_breakpoint_feature = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_select_breakpoint_phone = get_option('model_store_breakpoint_phone');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_phone === false) {
+				$saved_select_breakpoint_phone = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_select_breakpoint_tablet = get_option('model_store_breakpoint_tablet');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_tablet === false) {
+				$saved_select_breakpoint_tablet = 2; // Set it to 2 (checked) by default
+			}
+
+			$saved_select_breakpoint_desktop = get_option('model_store_breakpoint_desktop');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_desktop === false) {
+				$saved_select_breakpoint_desktop = 3; // Set it to 3 (checked) by default
+			}
+
+			$saved_select_breakpoint_largescreen = get_option('model_store_breakpoint_largescreen');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_largescreen === false) {
+				$saved_select_breakpoint_largescreen = 4; // Set it to 4 (checked) by default
+			}
+			
+
 
 			$output = '';
 
@@ -247,7 +294,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 			// The Loop
 			if ( $the_query->have_posts() ) {
 				$output .= '<div class="model-container">
-				<div class="model-content swiper" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="">
+				<div class="model-content swiper" data-breakpoint="'.$saved_breakpoint_feature.'" data-breakphone="'.$saved_select_breakpoint_phone.'" data-breaktablet="'.$saved_select_breakpoint_tablet.'" data-breakdesktop="'.$saved_select_breakpoint_desktop.'" data-breaklargescreen="'.$saved_select_breakpoint_largescreen.'" data-perview="'.$saved_select_slider_number.'" data-breakpoint="" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="'.$saved_slider_autoplay_delay.'" data-loop="'.$saved_loop_feature.'">
 				<div class="swiper-wrapper">';
 				
 				while ( $the_query->have_posts() ) :

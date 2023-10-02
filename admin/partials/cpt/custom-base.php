@@ -245,6 +245,48 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				$saved_slider_autoplay_delay = 1500; // Set it to 1500 by default
 			}
 
+			$saved_loop_feature = get_option('model_store_loop_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_loop_feature === false) {
+				$saved_loop_feature = 0; // Set it to 1 (checked) by default
+			}
+
+			$saved_select_slider_number = get_option('model_store_slider_number');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_slider_number === false) {
+				$saved_select_slider_number = 3; // Set it to 3 (checked) by default
+			}
+
+			$saved_breakpoint_feature = get_option('model_store_breakpoint_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_breakpoint_feature === false) {
+				$saved_breakpoint_feature = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_select_breakpoint_phone = get_option('model_store_breakpoint_phone');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_phone === false) {
+				$saved_select_breakpoint_phone = 1; // Set it to 1 (checked) by default
+			}
+
+			$saved_select_breakpoint_tablet = get_option('model_store_breakpoint_tablet');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_tablet === false) {
+				$saved_select_breakpoint_tablet = 2; // Set it to 2 (checked) by default
+			}
+
+			$saved_select_breakpoint_desktop = get_option('model_store_breakpoint_desktop');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_desktop === false) {
+				$saved_select_breakpoint_desktop = 3; // Set it to 3 (checked) by default
+			}
+
+			$saved_select_breakpoint_largescreen = get_option('model_store_breakpoint_largescreen');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_breakpoint_largescreen === false) {
+				$saved_select_breakpoint_largescreen = 4; // Set it to 4 (checked) by default
+			}
+
 
 
 
@@ -274,6 +316,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<th scope="row"><label for="model_store_number">Model Number</label></th>
 						<td>
 							<select id="model_store_number" name="model_store_number' . '">
+								<option value="0" ' . selected( $saved_select_number, 0, false ) . '>Select an option</option>
 								<option value="1" ' . selected( $saved_select_number, 1, false ) . '>1</option>
 								<option value="2" ' . selected( $saved_select_number, 2, false ) . '>2</option>
 								<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
@@ -324,23 +367,100 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 					</tr>
 					<tr><th scope="row"><hr></th><td><hr></td></tr>
 					<tr>
-						<th scope="row"><label for="model_store_enable_feature">Button</label></th>
+						<th scope="row"><label for="model_store_button_feature">Button</label></th>
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Button</span></legend>
-								<label for="model_store_enable_feature"><input type="checkbox" id="model_store_enable_feature" name="model_store_enable_feature" value="1" ' . checked($model_store_button_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_button_feature"><input type="checkbox" id="model_store_button_feature" name="model_store_button_feature" data-onload="' . esc_js('storeTitle') . ',' . esc_js('storeUrl') .'" onclick="fieldVisibility(event, \'' . esc_js('storeTitle') . '\', \'' . esc_js('storeUrl') . '\')" value="1" ' . checked($model_store_button_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
-					<tr>
+					<tr data-hidden="storeTitle" style="display: none;">
 						<th scope="row"><label for="model_store_title">Title:</label></th>
-						<td><input type="text" id="model_store_title" name="model_store_title" value="' . esc_attr($saved_title) . '" class="regular-text" /><br /></td>
+						<td><input type="text" id="model_store_title" name="model_store_title" value="' . esc_attr($saved_title) . '" class="regular-text" /><br /><p class="description">Enter the Title for your model store name.</p></td>
 					</tr>
-					<tr>
+					<tr data-hidden="storeUrl" style="display: none;">
 						<th scope="row"><label for="model_store_url">Location:</label></th>
 						<td><input type="url" id="model_store_url" name="model_store_url" value="' . esc_attr($saved_url) . '" class="regular-text code" /><br /><p class="description">Enter the URL for your model store link.</p></td>
 					</tr>
 					<tr><th scope="row"><hr></th><td><hr></td></tr>
+					<tr>
+						<th scope="row"><label for="model_store_breakpoint_feature">Slider Breakpoint</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Breakpoint</span></legend>
+								<label for="model_store_breakpoint_feature"><input type="checkbox" id="model_store_breakpoint_feature" name="model_store_breakpoint_feature" data-onload="' . esc_js('storeBreakpoint') .'" onclick="fieldVisibility(event, \'' . esc_js('storeBreakpoint') . '\')" value="1" ' . checked($saved_breakpoint_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr data-hidden="storeBreakpoint" style="display: none;">
+						<th scope="row"></th>
+						<td>
+							<div class="model-alignment">
+								<div class="breakpoint-part">
+									<label for="model_store_breakpoint_phone">Phone</label>
+									<br />
+									<select id="model_store_breakpoint_phone" name="model_store_breakpoint_phone' . '">
+										<option value="0" ' . selected( $saved_select_breakpoint_phone, 0, false ) . '>Select an option</option>
+										<option value="1" ' . selected( $saved_select_breakpoint_phone, 1, false ) . '>1</option>
+										<option value="2" ' . selected( $saved_select_breakpoint_phone, 2, false ) . '>2</option>
+										<option value="3" ' . selected( $saved_select_breakpoint_phone, 3, false ) . '>3</option>
+										<option value="4" ' . selected( $saved_select_breakpoint_phone, 4, false ) . '>4</option>
+										<option value="5" ' . selected( $saved_select_breakpoint_phone, 5, false ) . '>5</option>
+									</select>
+								</div>
+								<div class="breakpoint-part">
+									<label for="model_store_breakpoint_tablet">Tablet</label>
+									<br />
+									<select id="model_store_breakpoint_tablet" name="model_store_breakpoint_tablet' . '">
+										<option value="0" ' . selected( $saved_select_breakpoint_tablet, 0, false ) . '>Select an option</option>
+										<option value="1" ' . selected( $saved_select_breakpoint_tablet, 1, false ) . '>1</option>
+										<option value="2" ' . selected( $saved_select_breakpoint_tablet, 2, false ) . '>2</option>
+										<option value="3" ' . selected( $saved_select_breakpoint_tablet, 3, false ) . '>3</option>
+										<option value="4" ' . selected( $saved_select_breakpoint_tablet, 4, false ) . '>4</option>
+										<option value="5" ' . selected( $saved_select_breakpoint_tablet, 5, false ) . '>5</option>
+									</select>
+								</div>
+								<div class="breakpoint-part">
+									<label for="model_store_breakpoint_desktop">Desktop</label>
+									<br />
+									<select id="model_store_breakpoint_desktop" name="model_store_breakpoint_desktop' . '">
+										<option value="0" ' . selected( $saved_select_breakpoint_desktop, 0, false ) . '>Select an option</option>
+										<option value="1" ' . selected( $saved_select_breakpoint_desktop, 1, false ) . '>1</option>
+										<option value="2" ' . selected( $saved_select_breakpoint_desktop, 2, false ) . '>2</option>
+										<option value="3" ' . selected( $saved_select_breakpoint_desktop, 3, false ) . '>3</option>
+										<option value="4" ' . selected( $saved_select_breakpoint_desktop, 4, false ) . '>4</option>
+										<option value="5" ' . selected( $saved_select_breakpoint_desktop, 5, false ) . '>5</option>
+									</select>
+								</div>
+								<div class="breakpoint-part">
+									<label for="model_store_breakpoint_largescreen">Large Screen</label>
+									<br />
+									<select id="model_store_breakpoint_largescreen" name="model_store_breakpoint_largescreen' . '">
+										<option value="0" ' . selected( $saved_select_breakpoint_largescreen, 0, false ) . '>Select an option</option>
+										<option value="1" ' . selected( $saved_select_breakpoint_largescreen, 1, false ) . '>1</option>
+										<option value="2" ' . selected( $saved_select_breakpoint_largescreen, 2, false ) . '>2</option>
+										<option value="3" ' . selected( $saved_select_breakpoint_largescreen, 3, false ) . '>3</option>
+										<option value="4" ' . selected( $saved_select_breakpoint_largescreen, 4, false ) . '>4</option>
+										<option value="5" ' . selected( $saved_select_breakpoint_largescreen, 5, false ) . '>5</option>
+									</select>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr data-preview="storeBreakpoint" style="display: none;">
+						<th scope="row"><label for="model_store_slider_number">Slider Number</label></th>
+						<td>
+							<select id="model_store_slider_number" name="model_store_slider_number' . '">
+								<option value="0" ' . selected( $saved_select_slider_number, 0, false ) . '>Select an option</option>
+								<option value="1" ' . selected( $saved_select_slider_number, 1, false ) . '>1</option>
+								<option value="2" ' . selected( $saved_select_slider_number, 2, false ) . '>2</option>
+								<option value="3" ' . selected( $saved_select_slider_number, 3, false ) . '>3</option>
+								<option value="4" ' . selected( $saved_select_slider_number, 4, false ) . '>4</option>
+								<option value="5" ' . selected( $saved_select_slider_number, 5, false ) . '>5</option>
+							</select>
+						</td>
+					</tr>
 					<tr>
 						<th scope="row"><label for="model_store_slider_speed">Slider Speed:</label></th>
 						<td><input type="text" id="model_store_slider_speed" name="model_store_slider_speed" value="' . esc_attr($saved_slider_speed) . '" class="regular-text" /><br /><p class="description">Enter the slider speed.</p></td>
@@ -368,13 +488,22 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Autoplay</span></legend>
-								<label for="model_store_autoplay_feature"><input type="checkbox" id="model_store_autoplay_feature" name="model_store_autoplay_feature" value="1" ' . checked($saved_autoplay_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_autoplay_feature"><input type="checkbox" id="model_store_autoplay_feature" name="model_store_autoplay_feature" data-onload="' . esc_js('autoplayDelay') .'" onclick="fieldVisibility(event, \'' . esc_js('autoplayDelay') . '\')" value="1" ' . checked($saved_autoplay_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
-					<tr>
+					<tr data-hidden="autoplayDelay" style="display: none;">
 						<th scope="row"><label for="model_store_slider_autoplay_delay">Slider Autoplay Delay:</label></th>
 						<td><input type="text" id="model_store_slider_autoplay_delay" name="model_store_slider_autoplay_delay" value="' . esc_attr($saved_slider_autoplay_delay) . '" class="regular-text" /><br /><p class="description">Enter the slider autoplay delay.</p></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_loop_feature">Slider Loop</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Loop</span></legend>
+								<label for="model_store_loop_feature"><input type="checkbox" id="model_store_loop_feature" name="model_store_loop_feature" value="1" ' . checked($saved_loop_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
 					</tr>
 				</tbody>
 			</table>';
@@ -399,6 +528,13 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			register_setting('model_store_settings_group', 'model_store_pagination_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_autoplay_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_slider_autoplay_delay', 'absint');
+			register_setting('model_store_settings_group', 'model_store_loop_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_slider_number', 'absint');
+			register_setting('model_store_settings_group', 'model_store_breakpoint_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_breakpoint_phone', 'absint');
+			register_setting('model_store_settings_group', 'model_store_breakpoint_tablet', 'absint');
+			register_setting('model_store_settings_group', 'model_store_breakpoint_desktop', 'absint');
+			register_setting('model_store_settings_group', 'model_store_breakpoint_largescreen', 'absint');
 			
 		}
 
