@@ -103,6 +103,11 @@ class Model_Store_Public {
 		 */
 		
 		wp_enqueue_style( 'awesome-icons', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' );
+
+		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+			wp_enqueue_style( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'css/vendor/swiper-bundle.min.css', array(), '10.3.1', 'all' );
+		}
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-public.css', array(), $this->version, 'all' );
 
 	}
@@ -127,14 +132,21 @@ class Model_Store_Public {
 		 */
 
 		wp_enqueue_script( 'jQuery', plugin_dir_url( __FILE__ ) . 'js/vendor/jquery-3.7.1.min.js', array( '' ), '3.7.1', true );
-
+		
+		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+			wp_enqueue_script( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'js/vendor/swiper-bundle.min.js', array( 'jquery' ), '10.3.1', true );
+		}
 		if (is_singular() && has_shortcode(get_post()->post_content, 'model_search')) {
 			wp_enqueue_script( 'model-search', plugin_dir_url( __FILE__ ) . 'js/model-search.js', array( 'jquery' ), null, true );
+			wp_enqueue_script( 'model-action', plugin_dir_url( __FILE__ ) . 'js/model-search-action.js', array( 'jquery' ), null, true );
 		}
 		// Localize the script to pass PHP data to JavaScript
 		$search_ajax_nonce = wp_create_nonce( 'search_nonce_key' );
 		wp_localize_script( 'model-search', 'search_object', array('ajax_url' => admin_url('admin-ajax.php'), 'action' => 'search_ajax_action', 'security' => $search_ajax_nonce) );
 		
+		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+			wp_enqueue_script( 'slider-3d', plugin_dir_url( __FILE__ ) . 'js/swiper-slider.js', array( 'jquery' ), null, true );
+		}
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-public.js', array( 'jquery' ), $this->version, false );
 	}
 

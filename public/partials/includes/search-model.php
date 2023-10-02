@@ -75,8 +75,8 @@ if ( ! class_exists( 'searchStore' ) ) {
 
 			// The Loop
 			if ( $the_query->have_posts() ) {
-				$output .= '<div class="model-search">
-				<ul class="splide__list">';
+				$output .= '<div class="model-content">
+				<div class="splide__list">';
 				
 				while ( $the_query->have_posts() ) :
 					$the_query->the_post();
@@ -104,7 +104,7 @@ if ( ! class_exists( 'searchStore' ) ) {
 					// Post URL
 					$post_url = get_permalink();
 
-					$output .= '<li class="splide__slide featured-print is-visible is-next">
+					$output .= '<div class="splide_abc">
 					<div class="print-parts">
 						<div class="CollectThingWindow">
 							<div class="zuO6g"><span class="XIw8C">Select a Collection</span><div class="CollectThingWindow__closeImageWrapper--G75pa"><img class="" src="https://cdn.thingiverse.com/site/assets/inline-icons/03882d0bbea83d99907b.svg" alt="CloseIcon" loading="lazy"></div></div>
@@ -118,8 +118,12 @@ if ( ! class_exists( 'searchStore' ) ) {
 								<div class="print-taxonomy">
 									<div class="model-category">' . implode(' | ', $category_links) . '</div>
 									<div class="print-extra">
-										<ul>
-											<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+										<ul>';
+											if($file_url){
+												$output .= '<li><a href="' . esc_url($file_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											}else{
+												$output .= '<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											}
 											if($saved_like_feature == 1){
 												 // Display the modal
 												$output .= '<li><a href=""><i class="fa-regular fa-heart"></i></a></li>';
@@ -133,12 +137,12 @@ if ( ! class_exists( 'searchStore' ) ) {
 							</div>
 						</div>
 					</div>
-				</li>';
+				</div>';
 
 				endwhile;
 				/* Restore original Post Data */
 				wp_reset_postdata();
-				$output .= '</ul>
+				$output .= '</div>
 				</div>';
                 $response['updated'] = 'success';
 			} else {

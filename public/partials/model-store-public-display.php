@@ -35,6 +35,7 @@ class Model_Store_Public_Display {
 		if ( class_exists( 'searchStore' ) ) {
 			$searchStore = new searchStore();
 		}
+
 	}
 
 	/**
@@ -72,5 +73,9 @@ class Model_Store_Public_Display {
 		// Register shortcode
 		add_shortcode( 'model_store', array( $data, 'model_store_shortcode' ) );
 		add_shortcode( 'model_search', array( $data, 'model_search_shortcode' ) );
+		add_shortcode( 'model_slider', array( $data, 'model_slider_shortcode' ) );
+
+		// single page template
+		//add_filter('single_template', array( $data, 'model_store_template') );
 	}
 }

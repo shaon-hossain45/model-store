@@ -29,6 +29,12 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			add_action('admin_menu', array( $this, 'add_submenu_page_for_custom_post_type') );
 			// register wordpress default setting fileds
 			add_action('admin_init', array( $this, 'register_model_store_settings') );
+			
+			// meta box for file upload
+			add_action('add_meta_boxes', array( $this, 'add_model_store_meta_box') );
+
+			add_action('save_post', array( $this, 'save_model_store_meta_data') );
+
 		}
 
 		// Register Custom Post Type
@@ -81,7 +87,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				'exclude_from_search' => false,
 				'publicly_queryable'  => true,
 				'capability_type'     => 'post',
-				'rewrite'             => array('slug' => 'model'),
+				// 'rewrite'             => array('slug' => 'model'),
 			);
 			register_post_type( 'model_store', $args );
 
@@ -166,10 +172,10 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 		// Render callback of settings page
 		function render_model_store_settings_callback() {
 			// Retrieve any saved settings data
-			$saved_enable_feature = get_option('model_store_enable_feature');
+			$model_store_button_feature = get_option('model_store_button_feature');
 			// Set a default value for modal_store_enable_feature if it's not set yet
-			if ($saved_enable_feature === false) {
-				$saved_enable_feature = 1; // Set it to 1 (checked) by default
+			if ($model_store_button_feature === false) {
+				$model_store_button_feature = 1; // Set it to 1 (checked) by default
 			}
 
 			$saved_title = get_option('model_store_title');
@@ -194,6 +200,59 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			if ($saved_collect_feature === false) {
 				$saved_collect_feature = 1; // Set it to 1 (checked) by default
 			}
+
+			$saved_alignment = get_option('model_store_alignment');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_alignment === false) {
+				$saved_alignment = 2; // Set it to 2 (checked) by default
+			}
+
+			$saved_select_number = get_option('model_store_number');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_number === false) {
+				$saved_select_number = 3; // Set it to 3 (checked) by default
+			}
+
+			// Slider Options
+			
+			$saved_slider_speed = get_option('model_store_slider_speed');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_slider_speed === false) {
+				$saved_slider_speed = 1500; // Set it to 1500 by default
+			}
+
+			$saved_navigation_feature = get_option('model_store_navigation_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_navigation_feature === false) {
+				$saved_navigation_feature = 1; // Set it to 1 (checked) by default
+			}
+			
+			$saved_pagination_feature = get_option('model_store_pagination_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_pagination_feature === false) {
+				$saved_pagination_feature = 0; // Set it to 1 (checked) by default
+			}
+
+			$saved_autoplay_feature = get_option('model_store_autoplay_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_autoplay_feature === false) {
+				$saved_autoplay_feature = 0; // Set it to 1 (checked) by default
+			}
+
+			$saved_slider_autoplay_delay = get_option('model_store_slider_autoplay_delay');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_slider_autoplay_delay === false) {
+				$saved_slider_autoplay_delay = 1500; // Set it to 1500 by default
+			}
+
+
+
+
+
+
+
+
+
 			
 			// Check if the settings have been saved and display a success notice
 			if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
@@ -212,40 +271,110 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			echo '<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
-						<th scope="row"><label for="model_store_like_feature">Model Like Button</th>
+						<th scope="row"><label for="model_store_number">Model Number</label></th>
+						<td>
+							<select id="model_store_number" name="model_store_number' . '">
+								<option value="1" ' . selected( $saved_select_number, 1, false ) . '>1</option>
+								<option value="2" ' . selected( $saved_select_number, 2, false ) . '>2</option>
+								<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
+								<option value="4" ' . selected( $saved_select_number, 4, false ) . '>4</option>
+								<option value="5" ' . selected( $saved_select_number, 5, false ) . '>5</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label>Modal Position</label></th>
 						<td>
 							<fieldset>
-								<legend class="screen-reader-text"><span>Model Like Button</span></legend>
+								<legend class="screen-reader-text"><span>Modal Position</span></legend>
+								<div class="model-alignment">
+									<div class="model-part">
+										<input type="radio" id="model_store_alignment1" name="model_store_alignment" value="1" ' . checked($saved_alignment, 1, false) . '>
+										<label for="model_store_alignment1">Left</label>
+									</div>
+    								<div class="model-part">
+										<input type="radio" id="model_store_alignment2" name="model_store_alignment" value="2" ' . checked($saved_alignment, 2, false) . '>
+										<label for="model_store_alignment2">Center</label>
+									</div>
+									<div class="model-part">
+										<input type="radio" id="model_store_alignment3" name="model_store_alignment" value="3" ' . checked($saved_alignment, 3, false) . '>
+										<label for="model_store_alignment3">Right</label>
+									</div>
+								</div>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_like_feature">Like Button</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Like Button</span></legend>
 								<label for="model_store_like_feature"><input type="checkbox" id="model_store_like_feature" name="model_store_like_feature" value="1" ' . checked($saved_like_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="model_store_collect_feature">Model Collect Button</th>
+						<th scope="row"><label for="model_store_collect_feature">Collect Button</label></th>
 						<td>
 							<fieldset>
-								<legend class="screen-reader-text"><span>Model Collect Button</span></legend>
+								<legend class="screen-reader-text"><span>Collect Button</span></legend>
 								<label for="model_store_collect_feature"><input type="checkbox" id="model_store_collect_feature" name="model_store_collect_feature" value="1" ' . checked($saved_collect_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr><th scope="row"><hr></th><td><hr></td></tr>
 					<tr>
-						<th scope="row"><label for="model_store_enable_feature">Model Store Button</th>
+						<th scope="row"><label for="model_store_enable_feature">Button</label></th>
 						<td>
 							<fieldset>
-								<legend class="screen-reader-text"><span>Model Store Button</span></legend>
-								<label for="model_store_enable_feature"><input type="checkbox" id="model_store_enable_feature" name="model_store_enable_feature" value="1" ' . checked($saved_enable_feature, 1, false) . ' />Enable Feature</label>
+								<legend class="screen-reader-text"><span>Button</span></legend>
+								<label for="model_store_enable_feature"><input type="checkbox" id="model_store_enable_feature" name="model_store_enable_feature" value="1" ' . checked($model_store_button_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="model_store_title">Model Store Title:</label></th>
+						<th scope="row"><label for="model_store_title">Title:</label></th>
 						<td><input type="text" id="model_store_title" name="model_store_title" value="' . esc_attr($saved_title) . '" class="regular-text" /><br /></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="model_store_url">Model Store Location:</label></th>
+						<th scope="row"><label for="model_store_url">Location:</label></th>
 						<td><input type="url" id="model_store_url" name="model_store_url" value="' . esc_attr($saved_url) . '" class="regular-text code" /><br /><p class="description">Enter the URL for your model store link.</p></td>
+					</tr>
+					<tr><th scope="row"><hr></th><td><hr></td></tr>
+					<tr>
+						<th scope="row"><label for="model_store_slider_speed">Slider Speed:</label></th>
+						<td><input type="text" id="model_store_slider_speed" name="model_store_slider_speed" value="' . esc_attr($saved_slider_speed) . '" class="regular-text" /><br /><p class="description">Enter the slider speed.</p></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_navigation_feature">Slider Navigation</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Navigation</span></legend>
+								<label for="model_store_navigation_feature"><input type="checkbox" id="model_store_navigation_feature" name="model_store_navigation_feature" value="1" ' . checked($saved_navigation_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_pagination_feature">Slider Pagination</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Pagination</span></legend>
+								<label for="model_store_pagination_feature"><input type="checkbox" id="model_store_pagination_feature" name="model_store_pagination_feature" value="1" ' . checked($saved_pagination_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_autoplay_feature">Slider Autoplay</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Autoplay</span></legend>
+								<label for="model_store_autoplay_feature"><input type="checkbox" id="model_store_autoplay_feature" name="model_store_autoplay_feature" value="1" ' . checked($saved_autoplay_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_slider_autoplay_delay">Slider Autoplay Delay:</label></th>
+						<td><input type="text" id="model_store_slider_autoplay_delay" name="model_store_slider_autoplay_delay" value="' . esc_attr($saved_slider_autoplay_delay) . '" class="regular-text" /><br /><p class="description">Enter the slider autoplay delay.</p></td>
 					</tr>
 				</tbody>
 			</table>';
@@ -256,12 +385,48 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 		}
 
 		function register_model_store_settings() {
-			register_setting('model_store_settings_group', 'model_store_enable_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_button_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_title', 'sanitize_text_field');
 			register_setting('model_store_settings_group', 'model_store_url', 'esc_url_raw');
 			// Extra Buttons
 			register_setting('model_store_settings_group', 'model_store_like_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_collect_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_alignment', 'absint');
+			register_setting('model_store_settings_group', 'model_store_number', 'absint');
+			// Slider Options
+			register_setting('model_store_settings_group', 'model_store_slider_speed', 'absint');
+			register_setting('model_store_settings_group', 'model_store_navigation_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_pagination_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_autoplay_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_store_slider_autoplay_delay', 'absint');
+			
+		}
+
+		// Meta box file upload
+		function add_model_store_meta_box() {
+			add_meta_box(
+				'model_store_file_upload_meta_box',
+				__( 'Model File', 'model-store' ),
+				array( $this, 'render_model_store_meta_box' ),
+				'model_store',  // Use the custom post type slug
+				'side',
+				'default'
+			);
+		}
+
+		function render_model_store_meta_box($post) {
+			// Retrieve the existing file URL, if any
+			$file_url = get_post_meta($post->ID, '_model_store_file_upload_meta_key', true);
+		
+			// Output the file upload field
+			echo '<input type="text" id="model_store_file_upload_field" name="model_store_file_upload_field" value="' . esc_attr($file_url) . '" readonly />';
+			echo '<button class="button" id="upload_model_store_file_button">Upload</button>';
+		}
+
+		function save_model_store_meta_data($post_id) {
+			if (isset($_POST['model_store_file_upload_field'])) {
+				update_post_meta($post_id, '_model_store_file_upload_meta_key', esc_url($_POST['model_store_file_upload_field']));
+			}
 		}
 
 	}

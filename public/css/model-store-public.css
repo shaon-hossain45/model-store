@@ -7,37 +7,80 @@
  #03255b
  #ee9632
  */
-
 .model-container {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.model-sidebar{
+    width: 25%;
+}
+.model-content {
+    display: flex;
     flex-direction: column;
+    width: 75%;
 }
 .splide__list {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     height: 100%;
     margin: 0!important;
     padding: 0!important;
 }
-.model-container li.splide__slide {
+.splide_xyz {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     box-sizing: border-box;
     flex-shrink: 0;
-    list-style-type: none!important;
     margin: 0;
+    padding: 0;
     position: relative;
     overflow: hidden;
-    width: 350px;
-    min-height: 450px;
-    margin-right: 16px;
-}
-.print-list-item {
     background: #ffffff;
-    border-radius: 2px;
-    position: relative;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px #e0e0e0;
     border: 1px solid #e0e0e0;
+    width: calc(33.33% - 16px);
+}
+
+.model-content .splide_abc {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px #e0e0e0;
+    border: 1px solid #e0e0e0;
+    width: calc(33.33% - 16px);
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.model-content.model-5 .splide_abc {
+    width: calc(20% - 16px);
+}
+.model-content.model-4 .splide_abc {
+    width: calc(25% - 16px);
+}
+.model-content.model-3 .splide_abc {
+    width: calc(33.33% - 16px);
+}
+.model-content.model-2 .splide_abc {
+    width: calc(50% - 16px);
+}
+.model-content.model-1 .splide_abc {
+    width: calc(100% - 16px);
+}
+
+.print-list-item {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -92,9 +135,8 @@
     display: inline-flex;
 }
 .print-extra li {
-    padding-left: 5px;
-    padding-right: 5px;
-    margin: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .print-extra li a {
     color: #555555;
@@ -102,15 +144,17 @@
     display: inline-block;
     border: 1px solid #555555;
     border-radius: 3px;
-    padding: 0px 4px;
+    padding: 2px 6px 0px 6px;
     text-decoration: none;
+    min-width: 40px;
+    text-align: center;
 }
 .print-extra li i {
     font-size: 14px;
-    padding-left: 4px;
-    padding-right: 4px;
 }
-
+.print-extra li span{
+    margin-left: 3px;
+}
 .CollectThingWindow {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -155,11 +199,12 @@
 .dashboard-searchbar form input[type="text"] {
     border: none;
     font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
     border-radius: 5px;
     padding: 5px 40px 5px 15px;
     background-color: #F3F5F9;
     width: 100%;
-    height: 50px;
+    height: 47px;
 }
 .dashboard-searchbar form input.error{
     border: 1px solid red;
@@ -173,19 +218,22 @@
     /* Edge 12 -18 */
     color: #ee9632;
   }
-.dashboard-searchbar form button {
+form button[type="submit"] {
     border: 1px solid #ee9632;
     font-family: 'DM Sans', sans-serif;
     font-size: 17px;
     line-height: 1;
-    background-color: #ee9632;
-    color: white;
+    background-color: rgb(238, 150, 50);
+    color: #ededed;
     border-radius: 5px;
-    padding: 15px 35px;
+    padding: 14px 35px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
     width: 200px;
     margin-bottom: 0px;
+}
+form button[type="submit"]:hover {
+    color: #fff;
 }
 .dashboard-main {
     background-color: #F3F5F9;
@@ -268,10 +316,11 @@
     display: none;
     position: fixed;
     z-index: 100;
-    left: 0;
-    top: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
-    max-width: 100%;
+    max-width: 100% !important;
     height: 100%;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
@@ -313,22 +362,7 @@
     flex-direction: row;
     flex-wrap: wrap;
 }
-.model-modal li.splide__slide {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    list-style-type: none!important;
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-    width: calc(25% - 16px);
-    max-width: 350px;
-    min-height: 425px;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-}
+
 .search-results {
     overflow-y: auto;
     max-height: 580px;
@@ -362,6 +396,12 @@ a.store-btn:before{
     transform: translateY(-50%);
 }
 
+@media only screen and (max-width: 1023px) {
+    .model-modal .splide_abc, .model-container .splide_abc {
+        width: calc(33.33% - 16px);
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .dashboard-main {
         flex-direction: column;
@@ -384,7 +424,55 @@ a.store-btn:before{
     .model-modal .modal-content {
         width: 95%;
     }
-    .model-modal li.splide__slide{
+    .model-modal .splide_abc, .model-container .splide_abc {
         width: calc(50% - 16px);
     }
+}
+@media only screen and (max-width: 544px) {
+    .model-modal .splide_abc, .model-container .splide_abc {
+        width: calc(100% - 16px);
+    }
+}
+
+/* Swiper slider */
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+.swiper-wrapper {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.swiper-pagination {
+    bottom: 0px;
+    top: auto;
+}
+
+.swiper-pagination-bullet {
+    background: transparent none repeat scroll 0 0;
+    border: 1px solid #ee0f6f;
+    border-radius: 10px;
+    display: inline-block;
+    height: 10px;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    width: 26px;
+    transition: 0.2s;
+}
+.swiper-pagination-clickable .swiper-pagination-bullet {
+    cursor: pointer;
+}
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 0 5px;
+}
+.swiper-pagination-bullet-active {
+    background: rgba(0, 0, 0, 0) linear-gradient(to right, #ee0f6f 0%, #f89482 100%) repeat scroll 0 0;
+    border: medium none;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+}
+
+.swiper-button-next, .swiper-button-prev{
+    color: white;
+    transform: translateY(-50%);
 }

@@ -2,7 +2,7 @@
 	'use strict';
 
 	/**
-	 * All of the code for your public-facing JavaScript source
+	 * All of the code for your admin-facing JavaScript source
 	 * should reside in this file.
 	 *
 	 * Note: It has been assumed you will write jQuery code here, so the
@@ -28,5 +28,25 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+
+	jQuery(document).ready(function($) {
+		$('#upload_model_store_file_button').click(function(e) {
+			e.preventDefault();
+			var customUploader = wp.media({
+				title: 'Choose File',
+				button: {
+					text: 'Choose File'
+				},
+				multiple: false
+			});
+	
+			customUploader.on('select', function() {
+				var attachment = customUploader.state().get('selection').first().toJSON();
+				$('#model_store_file_upload_field').val(attachment.url);
+			});
+	
+			customUploader.open();
+		});
+	});
 
 })( jQuery );

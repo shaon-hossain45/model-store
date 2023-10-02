@@ -104,9 +104,9 @@ class Model_Store_Admin {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-admin.css', array(), $this->version, 'all' );
 		
-		if ($hook === 'model-store-settings') {
-			wp_enqueue_style('modal-store-settings-css', plugin_dir_url( __FILE__ ) . '/css/model-settings.css', array(), null, 'all');
-		}
+		//if ($hook === 'model-store-settings') {
+			wp_enqueue_style('model-store-settings-css', plugin_dir_url( __FILE__ ) . 'css/model-settings.css', array(), null, 'all');
+		//}
 	}
 
 	/**
@@ -130,8 +130,17 @@ class Model_Store_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-admin.js', array( 'jquery' ), $this->version, false );
 		
-		if ($hook === 'modal-store-settings') {
-			wp_enqueue_script( 'model-store-settings-js', plugin_dir_url( __FILE__ ) . 'js/model-settings.js', array( 'jquery' ), null, true );
+		// if ($hook === 'model-store-settings') {
+		// 	wp_enqueue_script( 'model-store-settings-js', plugin_dir_url( __FILE__ ) . 'js/model-settings.js', array( 'jquery' ), null, true );
+		// }
+
+		// Meta Box - Enqueue Scripts and Styles
+		global $post;
+		if ($hook == 'post-new.php' || $hook == 'post.php') {
+			if ('model_store' === $post->post_type) {
+				wp_enqueue_media();
+				wp_enqueue_script('model-store-upload-script', plugin_dir_url( __FILE__ ) . 'js/model-file-upload.js', array('jquery'), null, true);
+			}
 		}
 	}
 

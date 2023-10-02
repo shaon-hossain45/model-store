@@ -79,6 +79,10 @@ class Model_Store {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
+		// plugin row action
+		add_filter('plugin_action_links', array( $this, 'add_custom_row_actions' ), 10, 4);
+
+
 	}
 
 	/**
@@ -213,6 +217,20 @@ class Model_Store {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	
+	// Plugin row actions
+	public function add_custom_row_actions($actions, $plugin_file, $plugin_data, $context) {
+		if ( is_plugin_active($plugin_file) && basename( dirname(plugin_dir_path( __FILE__ )) ) . '/model-store.php' === $plugin_file ) {
+			// Add your custom row actions for active plugins
+			$settings_page_url = admin_url('edit.php?post_type=model_store&page=model-store-settings');
+			$support_url = "https://www.modelstore.com/support/";
+
+			$actions['settings'] = '<a href="' . esc_url($settings_page_url) . '">Settings</a>';
+			$actions['support'] = '<a href="' . esc_url($support_url) . '">Support</a>';
+		}
+		return $actions;
 	}
 
 }
