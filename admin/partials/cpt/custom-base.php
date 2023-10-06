@@ -287,11 +287,29 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				$saved_select_breakpoint_largescreen = 4; // Set it to 4 (checked) by default
 			}
 
+			$saved_3d_switch_button = get_option('model_store_3d_switch_button');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_3d_switch_button === false) {
+				$saved_3d_switch_button = 0; // Set it to 0 (checked) by default
+			}
 
+			$saved_space_between = get_option('model_store_space_between');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_space_between === false) {
+				$saved_space_between = 15; // Set it to 15 (checked) by default
+			}
 
+			$saved_slider_center = get_option('model_store_slider_center');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_slider_center === false) {
+				$saved_slider_center = 0; // Set it to 0 (checked) by default
+			}
 
-
-
+			$saved_select_slider_effect = get_option('model_store_slider_effect');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_slider_effect === false) {
+				$saved_select_slider_effect = 0; // Set it to 0 (checked) by default
+			}
 
 
 
@@ -313,18 +331,22 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			echo '<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
-						<th scope="row"><label for="model_store_number">Model Number</label></th>
+						<th scope="row"><label for="model_store_number">Model Store Number</label></th>
 						<td>
-							<select id="model_store_number" name="model_store_number' . '">
-								<option value="0" ' . selected( $saved_select_number, 0, false ) . '>Select an option</option>
-								<option value="1" ' . selected( $saved_select_number, 1, false ) . '>1</option>
-								<option value="2" ' . selected( $saved_select_number, 2, false ) . '>2</option>
-								<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
-								<option value="4" ' . selected( $saved_select_number, 4, false ) . '>4</option>
-								<option value="5" ' . selected( $saved_select_number, 5, false ) . '>5</option>
-							</select>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Store Number</span></legend>
+								<select id="model_store_number" name="model_store_number">
+									<option value="0" ' . selected( $saved_select_number, 0, false ) . '>Select an option</option>
+									<option value="1" ' . selected( $saved_select_number, 1, false ) . '>1</option>
+									<option value="2" ' . selected( $saved_select_number, 2, false ) . '>2</option>
+									<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
+									<option value="4" ' . selected( $saved_select_number, 4, false ) . '>4</option>
+									<option value="5" ' . selected( $saved_select_number, 5, false ) . '>5</option>
+								</select>
+							<fieldset>
 						</td>
 					</tr>
+					<tr><th scope="row"><hr></th><td><hr></td></tr>
 					<tr>
 						<th scope="row"><label>Modal Position</label></th>
 						<td>
@@ -371,7 +393,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Button</span></legend>
-								<label for="model_store_button_feature"><input type="checkbox" id="model_store_button_feature" name="model_store_button_feature" data-onload="' . esc_js('storeTitle') . ',' . esc_js('storeUrl') .'" onclick="fieldVisibility(event, \'' . esc_js('storeTitle') . '\', \'' . esc_js('storeUrl') . '\')" value="1" ' . checked($model_store_button_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_button_feature"><input type="checkbox" id="model_store_button_feature" name="model_store_button_feature" data-onload="' . esc_js('storeTitle') . ',' . esc_js('storeUrl') .'" onchange="fieldVisibility(event, \'' . esc_js('storeTitle') . '\', \'' . esc_js('storeUrl') . '\')" value="1" ' . checked($model_store_button_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
@@ -389,7 +411,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Breakpoint</span></legend>
-								<label for="model_store_breakpoint_feature"><input type="checkbox" id="model_store_breakpoint_feature" name="model_store_breakpoint_feature" data-onload="' . esc_js('storeBreakpoint') .'" onclick="fieldVisibility(event, \'' . esc_js('storeBreakpoint') . '\')" value="1" ' . checked($saved_breakpoint_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_breakpoint_feature"><input type="checkbox" id="model_store_breakpoint_feature" name="model_store_breakpoint_feature" data-onload="' . esc_js('storeBreakpoint') .'" onchange="fieldVisibility(event, \'' . esc_js('storeBreakpoint') . '\')" value="1" ' . checked($saved_breakpoint_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
@@ -400,7 +422,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 								<div class="breakpoint-part">
 									<label for="model_store_breakpoint_phone">Phone</label>
 									<br />
-									<select id="model_store_breakpoint_phone" name="model_store_breakpoint_phone' . '">
+									<select id="model_store_breakpoint_phone" name="model_store_breakpoint_phone">
 										<option value="0" ' . selected( $saved_select_breakpoint_phone, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_phone, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_phone, 2, false ) . '>2</option>
@@ -412,7 +434,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 								<div class="breakpoint-part">
 									<label for="model_store_breakpoint_tablet">Tablet</label>
 									<br />
-									<select id="model_store_breakpoint_tablet" name="model_store_breakpoint_tablet' . '">
+									<select id="model_store_breakpoint_tablet" name="model_store_breakpoint_tablet">
 										<option value="0" ' . selected( $saved_select_breakpoint_tablet, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_tablet, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_tablet, 2, false ) . '>2</option>
@@ -424,7 +446,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 								<div class="breakpoint-part">
 									<label for="model_store_breakpoint_desktop">Desktop</label>
 									<br />
-									<select id="model_store_breakpoint_desktop" name="model_store_breakpoint_desktop' . '">
+									<select id="model_store_breakpoint_desktop" name="model_store_breakpoint_desktop">
 										<option value="0" ' . selected( $saved_select_breakpoint_desktop, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_desktop, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_desktop, 2, false ) . '>2</option>
@@ -436,7 +458,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 								<div class="breakpoint-part">
 									<label for="model_store_breakpoint_largescreen">Large Screen</label>
 									<br />
-									<select id="model_store_breakpoint_largescreen" name="model_store_breakpoint_largescreen' . '">
+									<select id="model_store_breakpoint_largescreen" name="model_store_breakpoint_largescreen">
 										<option value="0" ' . selected( $saved_select_breakpoint_largescreen, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_largescreen, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_largescreen, 2, false ) . '>2</option>
@@ -451,19 +473,22 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 					<tr data-preview="storeBreakpoint" style="display: none;">
 						<th scope="row"><label for="model_store_slider_number">Slider Number</label></th>
 						<td>
-							<select id="model_store_slider_number" name="model_store_slider_number' . '">
-								<option value="0" ' . selected( $saved_select_slider_number, 0, false ) . '>Select an option</option>
-								<option value="1" ' . selected( $saved_select_slider_number, 1, false ) . '>1</option>
-								<option value="2" ' . selected( $saved_select_slider_number, 2, false ) . '>2</option>
-								<option value="3" ' . selected( $saved_select_slider_number, 3, false ) . '>3</option>
-								<option value="4" ' . selected( $saved_select_slider_number, 4, false ) . '>4</option>
-								<option value="5" ' . selected( $saved_select_slider_number, 5, false ) . '>5</option>
-							</select>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Number</span></legend>
+								<select id="model_store_slider_number" name="model_store_slider_number">
+									<option value="0" ' . selected( $saved_select_slider_number, 0, false ) . '>Select an option</option>
+									<option value="1" ' . selected( $saved_select_slider_number, 1, false ) . '>1</option>
+									<option value="2" ' . selected( $saved_select_slider_number, 2, false ) . '>2</option>
+									<option value="3" ' . selected( $saved_select_slider_number, 3, false ) . '>3</option>
+									<option value="4" ' . selected( $saved_select_slider_number, 4, false ) . '>4</option>
+									<option value="5" ' . selected( $saved_select_slider_number, 5, false ) . '>5</option>
+								</select>
+							</fieldset>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="model_store_slider_speed">Slider Speed:</label></th>
-						<td><input type="text" id="model_store_slider_speed" name="model_store_slider_speed" value="' . esc_attr($saved_slider_speed) . '" class="regular-text" /><br /><p class="description">Enter the slider speed.</p></td>
+						<td><input type="number" id="model_store_slider_speed" name="model_store_slider_speed" value="' . esc_attr($saved_slider_speed) . '" class="regular-text" /><br /><p class="description">Enter the slider speed.</p></td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="model_store_navigation_feature">Slider Navigation</label></th>
@@ -488,13 +513,13 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Autoplay</span></legend>
-								<label for="model_store_autoplay_feature"><input type="checkbox" id="model_store_autoplay_feature" name="model_store_autoplay_feature" data-onload="' . esc_js('autoplayDelay') .'" onclick="fieldVisibility(event, \'' . esc_js('autoplayDelay') . '\')" value="1" ' . checked($saved_autoplay_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_autoplay_feature"><input type="checkbox" id="model_store_autoplay_feature" name="model_store_autoplay_feature" data-onload="' . esc_js('autoplayDelay') .'" onchange="fieldVisibility(event, \'' . esc_js('autoplayDelay') . '\')" value="1" ' . checked($saved_autoplay_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr data-hidden="autoplayDelay" style="display: none;">
 						<th scope="row"><label for="model_store_slider_autoplay_delay">Slider Autoplay Delay:</label></th>
-						<td><input type="text" id="model_store_slider_autoplay_delay" name="model_store_slider_autoplay_delay" value="' . esc_attr($saved_slider_autoplay_delay) . '" class="regular-text" /><br /><p class="description">Enter the slider autoplay delay.</p></td>
+						<td><input type="number" id="model_store_slider_autoplay_delay" name="model_store_slider_autoplay_delay" value="' . esc_attr($saved_slider_autoplay_delay) . '" class="regular-text" /><br /><p class="description">Enter the slider autoplay delay.</p></td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="model_store_loop_feature">Slider Loop</label></th>
@@ -502,6 +527,52 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Loop</span></legend>
 								<label for="model_store_loop_feature"><input type="checkbox" id="model_store_loop_feature" name="model_store_loop_feature" value="1" ' . checked($saved_loop_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_space_between">Slider Spacing:</label></th>
+						<td><input type="number" id="model_store_space_between" name="model_store_space_between" value="' . esc_attr($saved_space_between) . '" class="regular-text" /><br /><p class="description">Enter spacing between of slide item.</p></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_slider_center">Slider Center</label></th>
+						<td>
+							<fieldset>
+									<legend class="screen-reader-text"><span>Slider Center</span></legend>
+									<label for="model_store_slider_center"><input type="checkbox" id="model_store_slider_center" name="model_store_slider_center" value="1" ' . checked($saved_slider_center, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_slider_effect">Slider Effect</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Slider Effect</span></legend>
+								<select id="model_store_slider_effect" name="model_store_slider_effect" data-onload="' . esc_js('effect') .'" onchange="fieldVisibilitySelect(event,  \'' . esc_js('effect') . '\')">
+									<option value="0" ' . selected( $saved_select_slider_effect, 0, false ) . '>Select an option</option>
+									<option value="1" ' . selected( $saved_select_slider_effect, 1, false ) . '>Coverflow Effect</option>
+									<option value="2" ' . selected( $saved_select_slider_effect, 2, false ) . '>Fade Effect</option>
+									<option value="3" ' . selected( $saved_select_slider_effect, 3, false ) . '>Flip Effect</option>
+								</select>
+							</fieldset>
+						</td>
+					</tr>
+					<tr data-select="effect" data-value="1" style="display: none;">
+						<th scope="row"><label for="model_store_3d_switch_button">3D Slider</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>3D Slider</span></legend>
+								<div class="model-switchbox">
+									<div class="model-switchpart">
+										<input type="checkbox" id="model_store_3d_switch_button" name="model_store_3d_switch_button" value="1" ' . checked($saved_3d_switch_button, 1, false) . '>
+										<label for="model_store_3d_switch_button">
+											<span class="switch-on">On</span>
+											<span class="switch-off">Off</span>
+											<span class="switch-ball"></span>
+										</label>
+									</div>
+									<span>Enable Feature</span>
+								</div>
 							</fieldset>
 						</td>
 					</tr>
@@ -535,6 +606,10 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			register_setting('model_store_settings_group', 'model_store_breakpoint_tablet', 'absint');
 			register_setting('model_store_settings_group', 'model_store_breakpoint_desktop', 'absint');
 			register_setting('model_store_settings_group', 'model_store_breakpoint_largescreen', 'absint');
+			register_setting('model_store_settings_group', 'model_store_3d_switch_button', 'absint');
+			register_setting('model_store_settings_group', 'model_store_space_between', 'absint');
+			register_setting('model_store_settings_group', 'model_store_slider_center', 'absint');
+			register_setting('model_store_settings_group', 'model_store_slider_effect', 'absint');
 			
 		}
 

@@ -276,6 +276,30 @@ if ( ! class_exists( 'modelBase' ) ) {
 			if ($saved_select_breakpoint_largescreen === false) {
 				$saved_select_breakpoint_largescreen = 4; // Set it to 4 (checked) by default
 			}
+
+			$saved_3d_switch_button = get_option('model_store_3d_switch_button');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_3d_switch_button === false) {
+				$saved_3d_switch_button = 0; // Set it to 0 (checked) by default
+			}
+
+			$saved_space_between = get_option('model_store_space_between');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_space_between === false) {
+				$saved_space_between = 15; // Set it to 15 (checked) by default
+			}
+
+			$saved_slider_center = get_option('model_store_slider_center');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_slider_center === false) {
+				$saved_slider_center = 0; // Set it to 1 (checked) by default
+			}
+			
+			$saved_select_slider_effect = get_option('model_store_slider_effect');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_select_slider_effect === false) {
+				$saved_select_slider_effect = 0; // Set it to 0 (checked) by default
+			}
 			
 
 
@@ -294,7 +318,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 			// The Loop
 			if ( $the_query->have_posts() ) {
 				$output .= '<div class="model-container">
-				<div class="model-content swiper" data-breakpoint="'.$saved_breakpoint_feature.'" data-breakphone="'.$saved_select_breakpoint_phone.'" data-breaktablet="'.$saved_select_breakpoint_tablet.'" data-breakdesktop="'.$saved_select_breakpoint_desktop.'" data-breaklargescreen="'.$saved_select_breakpoint_largescreen.'" data-perview="'.$saved_select_slider_number.'" data-breakpoint="" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="'.$saved_slider_autoplay_delay.'" data-loop="'.$saved_loop_feature.'">
+				<div class="model-content swiper" data-breakpoint="'.$saved_breakpoint_feature.'" data-breakphone="'.$saved_select_breakpoint_phone.'" data-breaktablet="'.$saved_select_breakpoint_tablet.'" data-breakdesktop="'.$saved_select_breakpoint_desktop.'" data-breaklargescreen="'.$saved_select_breakpoint_largescreen.'" data-perview="'.$saved_select_slider_number.'" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="'.$saved_slider_autoplay_delay.'" data-loop="'.$saved_loop_feature.'" data-3d="'.$saved_3d_switch_button.'" data-spacebetween="'.$saved_space_between.'" data-center="'.$saved_slider_center.'" data-effect="'.$saved_select_slider_effect.'">
 				<div class="swiper-wrapper">';
 				
 				while ( $the_query->have_posts() ) :
