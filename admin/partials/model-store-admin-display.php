@@ -51,6 +51,6 @@ class Model_Store_Admin_Display {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/cpt/custom-base.php';
+		require_once plugin_dir_path( __FILE__ ) . 'cpt/custom-base.php';
 	}
 }

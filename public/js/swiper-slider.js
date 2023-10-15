@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var sliderSpaceBet = document.querySelector('.swiper').getAttribute('data-spacebetween');
 
     var sliderEffect = document.querySelector('.swiper').getAttribute('data-effect');
-    sliderEffect = (sliderEffect == 1) ? 'coverflow' : (sliderEffect == 2) ? 'fade' : (sliderEffect == 3) ? 'flip' : 'slide';
-
+    sliderEffectTxt = (sliderEffect == 1) ? 'coverflow' : 'slide';
+    
     var slider3D = document.querySelector('.swiper').getAttribute('data-3d');
     
 
-    var swiper = new Swiper(".swiper", {
-        slidesPerView: (sliderBreakpoint == 1 || sliderEffect == 2 || sliderEffect == 3) ? 1 : sliderPerview, // Breakpoint dependable
-        spaceBetween: (slider3D == 1) ? "-100" : sliderSpaceBet, // 3D dependable
+    var swiper = new Swiper(".swiper-feature", {
+        slidesPerView: (sliderBreakpoint == 1) ? 1 : (sliderEffect == 1) ? 'auto' : sliderPerview, // Breakpoint dependable
+        spaceBetween: (sliderEffect == 1 && slider3D == 1) ? "-100" : sliderSpaceBet, // 3D dependable
         speed: parseInt(sliderSpeed),
         loop: (slider3D == 1) ? true : sliderLoop, // 3D dependable
         centeredSlides: (slider3D == 1) ? true : sliderCenter, // 3D dependable
@@ -40,8 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // pauseOnMouseEnter: true,
             disableOnInteraction: false, // Enable autoplay even on slider interaction (dragging)
         } : false, //ShortenMode by Javascript
-        // cssMode: true,
-        allowTouchMove:	true,
         pagination: {
             enabled: (sliderPag == 1) ? true : false, //ShortenMode by Javascript
             el: '.swiper-pagination',
@@ -73,14 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 slidesPerView: sliderBreakLargeScreen,
             },
         } : false, //ShortenMode by Javascript,
-        effect: sliderEffect,
-        fadeEffect: (sliderEffect == 2) ? {          
-            crossFade: true     // resolve the overlapping of the slides
-        } : false,
-        flipEffect: (sliderEffect == 3) ? {
-            limitRotation: true,
-            slideShadows: true,
-        } : false,
+        effect: sliderEffectTxt,
 	    grabCursor: true,
 	    coverflowEffect: (slider3D == 1) ? {
 		    rotate: 0,
@@ -96,14 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
             slideShadows: true,
             stretch: 0
         },
-        // keyboard: {
-        //     enabled: true,
-        //     onlyInViewport: false,
-        // },
-        // mousewheel: {
-        //     invert: true,
-        //     forceToAxis: true,
-        // },
+        allowTouchMove:	true,
+        keyboard: {
+            enabled: true,
+            onlyInViewport: false,
+        },
+        mousewheel: false
     });
-
+    
 });

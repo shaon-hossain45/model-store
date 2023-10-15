@@ -35,6 +35,9 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 
 			add_action('save_post', array( $this, 'save_model_store_meta_data') );
 
+			add_action('add_meta_boxes', array( $this, 'add_gallery_meta_box') );
+			add_action('save_post', array( $this, 'save_gallery_meta_box_data') );
+
 		}
 
 		// Register Custom Post Type
@@ -73,7 +76,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				'label'               => __( 'Model Store', 'model-store' ),
 				'description'         => __( 'Post Type Description', 'model-store' ),
 				'labels'              => $labels,
-				'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
+				'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'revisions', 'custom-fields' ),
 				'hierarchical'        => false,
 				'public'              => true,
 				'show_ui'             => true,
@@ -213,6 +216,12 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				$saved_select_number = 3; // Set it to 3 (checked) by default
 			}
 
+			$saved_related_number = get_option('model_related_number');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_related_number === false) {
+				$saved_related_number = 4; // Set it to 4 (checked) by default
+			}
+
 			// Slider Options
 			
 			$saved_slider_speed = get_option('model_store_slider_speed');
@@ -342,6 +351,21 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 									<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
 									<option value="4" ' . selected( $saved_select_number, 4, false ) . '>4</option>
 									<option value="5" ' . selected( $saved_select_number, 5, false ) . '>5</option>
+								</select>
+							<fieldset>
+						</td>
+					</tr>
+					<tr><th scope="row"><hr></th><td><hr></td></tr>
+					<tr>
+						<th scope="row"><label for="model_related_number">Model Related Number</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Related Number</span></legend>
+								<select id="model_related_number" name="model_related_number">
+									<option value="0" ' . selected( $saved_related_number, 0, false ) . '>Select an option</option>
+									<option value="3" ' . selected( $saved_related_number, 3, false ) . '>3</option>
+									<option value="4" ' . selected( $saved_related_number, 4, false ) . '>4</option>
+									<option value="5" ' . selected( $saved_related_number, 5, false ) . '>5</option>
 								</select>
 							<fieldset>
 						</td>
@@ -551,8 +575,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 								<select id="model_store_slider_effect" name="model_store_slider_effect" data-onload="' . esc_js('effect') .'" onchange="fieldVisibilitySelect(event,  \'' . esc_js('effect') . '\')">
 									<option value="0" ' . selected( $saved_select_slider_effect, 0, false ) . '>Select an option</option>
 									<option value="1" ' . selected( $saved_select_slider_effect, 1, false ) . '>Coverflow Effect</option>
-									<option value="2" ' . selected( $saved_select_slider_effect, 2, false ) . '>Fade Effect</option>
-									<option value="3" ' . selected( $saved_select_slider_effect, 3, false ) . '>Flip Effect</option>
 								</select>
 							</fieldset>
 						</td>
@@ -593,6 +615,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			register_setting('model_store_settings_group', 'model_store_collect_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_alignment', 'absint');
 			register_setting('model_store_settings_group', 'model_store_number', 'absint');
+			register_setting('model_store_settings_group', 'model_related_number', 'absint');
 			// Slider Options
 			register_setting('model_store_settings_group', 'model_store_slider_speed', 'absint');
 			register_setting('model_store_settings_group', 'model_store_navigation_feature', 'absint');
@@ -627,16 +650,81 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 
 		function render_model_store_meta_box($post) {
 			// Retrieve the existing file URL, if any
-			$file_url = get_post_meta($post->ID, '_model_store_file_upload_meta_key', true);
+			$file_urls = get_post_meta($post->ID, '_model_store_file_upload_meta_key', true);
 		
 			// Output the file upload field
-			echo '<input type="text" id="model_store_file_upload_field" name="model_store_file_upload_field" value="' . esc_attr($file_url) . '" readonly />';
-			echo '<button class="button" id="upload_model_store_file_button">Upload</button>';
+			// Output the file upload field
+			echo '<ul id="model_store_file_upload_list">';
+			if ($file_urls) {
+				foreach ($file_urls as $index => $file_url) {
+					echo '<li><input type="text" name="model_store_file_upload_field[]" value="' . esc_attr($file_url) . '" readonly /><button class="remove-file-button" data-index="' . $index . '">Remove</button></li>';
+				}
+			}
+			echo '</ul>';
+			echo '<button class="button" id="upload_model_store_file_button">Set model file</button>';
 		}
 
 		function save_model_store_meta_data($post_id) {
 			if (isset($_POST['model_store_file_upload_field'])) {
-				update_post_meta($post_id, '_model_store_file_upload_meta_key', esc_url($_POST['model_store_file_upload_field']));
+				$file_urls = array_map('esc_url', $_POST['model_store_file_upload_field']);
+        		update_post_meta($post_id, '_model_store_file_upload_meta_key', $file_urls);
+			}
+		}
+
+
+
+		function add_gallery_meta_box() {
+			add_meta_box(
+				'model_gallery_images',
+				__( 'Model Gallery', 'model-store' ),
+				array( $this, 'display_gallery_meta_box' ),
+				'model_store',
+				'side',
+				'default'
+			);
+		}
+		
+		
+		function display_gallery_meta_box($post) {
+			// Display the gallery images here
+			$gallery_images = get_post_meta($post->ID, 'model_image_gallery', true);
+			$gallery_images_value = !empty($gallery_images) ? implode(',', $gallery_images) : '';
+			$update_meta = false;
+			$updated_gallery_ids = array();
+
+			// Output the current images in the gallery
+			echo '<div id="model_images_container">
+			<ul class="model_images ui-sortable">';
+				if (!empty($gallery_images)) {
+					foreach ($gallery_images as $image_id) {
+						$attachment = wp_get_attachment_image( $image_id, 'thumbnail' );
+						// if attachment is empty skip.
+						if ( empty( $attachment ) ) {
+							$update_meta = true;
+							continue;
+						}
+						echo '<li class="image" data-attachment_id="'. esc_attr( $image_id ) .'">'. $attachment .'<ul class="actions"><li><a href="#" class="delete" data-title="'. esc_attr("Delete image") .'">'. esc_html("Delete") .'</a></li></ul></li>';
+						// rebuild ids to be saved.
+						$updated_gallery_ids[] = $image_id;
+					}
+					// need to update product meta to set new gallery ids
+					if ( $update_meta ) {
+						update_post_meta( $post->ID, 'model_image_gallery', implode( ',', $updated_gallery_ids ) );
+					}
+				}
+			echo '</ul></div>';
+			echo '<input type="hidden" id="model_image_gallery" name="model_image_gallery" value="'. esc_attr( implode( ',', $updated_gallery_ids ) ) .'" />';
+			// Add an "Add Images" button
+			echo '<p class="add_model_images hide-if-no-js">
+				<a href="#" data-choose="'. esc_attr( "Add images to model gallery" ) .'" data-update="'. esc_attr( "Add to gallery" ) .'" data-delete="'. esc_attr( "Delete image" ) .'" data-text="'. esc_attr( "Delete" ) .'">'. esc_html( "Add model gallery images" ) .'</a>
+			</p>';
+		}
+
+		function save_gallery_meta_box_data($post_id) {
+			if (isset($_POST['model_image_gallery'])) {
+				$image_ids = explode(',', $_POST['model_image_gallery']);
+				$image_ids = array_map('intval', $image_ids);
+				update_post_meta($post_id, 'model_image_gallery', $image_ids);
 			}
 		}
 

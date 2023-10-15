@@ -75,7 +75,7 @@ if ( ! class_exists( 'searchStore' ) ) {
 
 			// The Loop
 			if ( $the_query->have_posts() ) {
-				$output .= '<div class="model-content">
+				$output .= '<div class="model-content search">
 				<div class="splide__list">';
 				
 				while ( $the_query->have_posts() ) :
@@ -86,6 +86,10 @@ if ( ! class_exists( 'searchStore' ) ) {
 
 					// Image
 					$image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); // 'full' is the image size
+					// Set a default value for modal_store_enable_feature if it's not set yet
+					if ($image_url == '') {
+						$image_url = MS_ABSPATH .'/public/images/model-store-placeholder.png'; // Set it to 1 (checked) by default
+					}
 
 					// Categories
 					$categories = get_the_category();

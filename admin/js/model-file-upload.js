@@ -32,20 +32,36 @@
 	jQuery(document).ready(function($) {
 		$('#upload_model_store_file_button').click(function(e) {
 			e.preventDefault();
-			var customUploader = wp.media({
-				title: 'Choose File',
-				button: {
-					text: 'Choose File'
-				},
-				multiple: false
-			});
-	
-			customUploader.on('select', function() {
-				var attachment = customUploader.state().get('selection').first().toJSON();
-				$('#model_store_file_upload_field').val(attachment.url);
-			});
-	
-			customUploader.open();
+        var customUploader = wp.media({
+            title: 'Choose Files',
+            button: {
+                text: 'Choose Files'
+            },
+            multiple: true
+        });
+
+        customUploader.on('select', function() {
+            var attachments = customUploader.state().get('selection').toJSON();
+            var attachmentUrls = [];
+			console.log(attachmentUrls);
+            $.each(attachments, function(index, attachment) {
+                attachmentUrls.push(attachment.url);
+            });
+
+            // Append the URLs to the file upload list
+            var uploadList = $('#model_store_file_upload_list');
+            $.each(attachmentUrls, function(index, url) {
+                uploadList.append('<li><input type="text" name="model_store_file_upload_field[]" value="' + url + '" readonly /><button class="remove-file-button" data-index="' + index + '">Remove</button></li>');
+            });
+        });
+
+        customUploader.open();
+		});
+		// Remove uploaded item on button click
+		$(document).on('click', '.remove-file-button', function(e) {
+			e.preventDefault();
+			var indexToRemove = $(this).data('index');
+			$(this).closest('li').remove();
 		});
 	});
 

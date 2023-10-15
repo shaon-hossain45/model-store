@@ -20,6 +20,10 @@
     flex-direction: column;
     width: 75%;
 }
+
+.model-content.search {
+    width: 100%;
+}
 .splide__list {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -43,7 +47,7 @@
     border-radius: 3px;
     box-shadow: 0 2px 5px #e0e0e0;
     border: 1px solid #e0e0e0;
-    width: calc(33.33% - 16px);
+    width: 33.33%;
 }
 
 .model-content .splide_abc {
@@ -78,6 +82,13 @@
 }
 .model-content.model-1 .splide_abc {
     width: calc(100% - 16px);
+}
+
+.model-modal.left .model-content .splide_abc, .model-modal.right .model-content .splide_abc {
+    width: calc(50% - 16px);
+}
+.model-modal .model-content .splide_abc {
+    margin-bottom: 16px;
 }
 
 .print-list-item {
@@ -212,26 +223,27 @@
     background-color: #F3F5F9;
     width: 100%;
     height: 47px;
+    caret-color: #fa6831;
 }
 .dashboard-searchbar form input.error{
     border: 1px solid red;
 }
 .dashboard-searchbar form input::placeholder {
-    color: #ee9632;
+    color: #fa6831;
     opacity: 1; /* Firefox */
-  }
+}
   
 .dashboard-searchbar form input::-ms-input-placeholder { 
     /* Edge 12 -18 */
-    color: #ee9632;
-  }
+    color: #fa6831;
+}
 form button[type="submit"] {
-    border: 1px solid #ee9632;
+    border: 1px solid #fa6831;
     font-family: 'DM Sans', sans-serif;
     font-size: 17px;
     line-height: 1;
-    background-color: rgb(238, 150, 50);
-    color: #ededed;
+    background-color: #fa6831;
+    color: #f85555;
     border-radius: 5px;
     padding: 14px 35px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -268,7 +280,7 @@ form button[type="submit"]:hover {
 
 .searchIcon-MYkVc i {
     font-size: 16px;
-    color: #ee9632;
+    color: #fa6831;
 }
 
 /* PreLoader CSS */
@@ -293,7 +305,7 @@ form button[type="submit"]:hover {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: #F08C2B;
+    background: #fa6831;
     position: absolute;
     left: 0;
     top: 0;
@@ -333,7 +345,7 @@ form button[type="submit"]:hover {
     background-color: rgba(0,0,0,0.4);
 }
 
-.model-modal .modal-content {
+.model-modal .modal-content, .model-modal.center .modal-content {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -343,6 +355,24 @@ form button[type="submit"]:hover {
     border: 1px solid #888;
     width: 75%;
     border-radius: 4px;
+}
+.model-modal.left .modal-content{
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 30%;
+    height: 100vh;
+    right: unset;
+    transform: unset;
+}
+.model-modal.right .modal-content{
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 30%;
+    height: 100vh;
+    left: unset;
+    transform: unset;
 }
 
 .close {
@@ -369,10 +399,13 @@ form button[type="submit"]:hover {
     flex-direction: row;
     flex-wrap: wrap;
 }
-
-.search-results {
+.model-modal .search-results {
     overflow-y: auto;
-    max-height: 580px;
+    max-height: 100%;
+}
+.model-modal.center .search-results {
+    overflow-y: auto;
+    height: 580px;
 }
 
 a.store-btn {
@@ -446,16 +479,16 @@ a.store-btn:before{
     width: 100%;
     height: 100%;
 }
-.swiper-wrapper {
+.swiper-feature .swiper-wrapper {
     padding-top: 50px;
     padding-bottom: 50px;
 }
-.swiper-pagination {
+.swiper-feature .swiper-pagination {
     bottom: 0px;
     top: auto;
 }
 
-.swiper-pagination-bullet {
+.swiper-feature .swiper-pagination-bullet {
     background: transparent none repeat scroll 0 0;
     border: 1px solid #ee0f6f;
     border-radius: 10px;
@@ -466,27 +499,36 @@ a.store-btn:before{
     width: 26px;
     transition: 0.2s;
 }
-.swiper-pagination-clickable .swiper-pagination-bullet {
+.swiper-feature .swiper-pagination-clickable .swiper-pagination-bullet {
     cursor: pointer;
 }
-.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+.swiper-feature .swiper-pagination-bullet {
     margin: 0 5px;
 }
-.swiper-pagination-bullet-active {
-    background: rgba(0, 0, 0, 0) linear-gradient(to right, #ee0f6f 0%, #f89482 100%) repeat scroll 0 0;
+.swiper-feature .swiper-pagination-bullet-active {
+    background: rgba(0, 0, 0, 0) linear-gradient(to right, #ee0f6f 0%, #fa6831 100%) repeat scroll 0 0;
     border: medium none;
     opacity: 1;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }
 
-.swiper-button-next, .swiper-button-prev{
+.swiper-feature .swiper-button-next, .swiper-feature .swiper-button-prev{
     color: #ee0f6f;
     transform: translateY(-50%);
     margin: 0px;
-    background: #f89482;
+    background: #fa6831;
     border-radius: 2px;
     padding: 30px 15px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    width: 30px;
 }
-.swiper-button-prev:after, .swiper-rtl .swiper-button-next:after, .swiper-button-next:after, .swiper-rtl .swiper-button-prev:after {
+.swiper-feature:hover .swiper-button-next, .swiper-feature:hover .swiper-button-prev {
+opacity: 1;
+}
+.swiper-feature:hover .swiper-button-next.swiper-button-disabled, .swiper-feature:hover .swiper-button-prev.swiper-button-disabled {
+opacity: 0.35;
+}
+.swiper-feature .swiper-button-prev:after, .swiper-feature .swiper-button-next:after {
     font-size: 30px;
 }

@@ -71,7 +71,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 					$image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); // 'full' is the image size
 					// Set a default value for modal_store_enable_feature if it's not set yet
 					if ($image_url == '') {
-						$image_url = plugin_dir_url( __DIR__ ) . '../images/model-store-placeholder.png'; // Set it to 1 (checked) by default
+						$image_url = MS_ABSPATH .'/public/images/model-store-placeholder.png'; // Set it to 1 (checked) by default
 					}
 					$file_url = get_post_meta(get_the_ID(), '_model_store_file_upload_meta_key', true);
 					// Categories
@@ -106,11 +106,11 @@ if ( ! class_exists( 'modelBase' ) ) {
 									<div class="model-category">' . implode(' | ', $category_links) . '</div>
 									<div class="print-extra">
 										<ul>';
-											if($file_url){
-												$output .= '<li><a href="' . esc_url($file_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
-											}else{
-												$output .= '<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
-											}
+											// if($file_url){
+											// 	$output .= '<li><a href="' . esc_url($file_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											// }else{
+											// 	$output .= '<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											// }
 											if($saved_like_feature == 1){
 												 // Display the modal
 												$output .= '<li><a href=""><i class="fa-regular fa-heart"></i></a></li>';
@@ -164,6 +164,12 @@ if ( ! class_exists( 'modelBase' ) ) {
 			if ($get_store_location_url === false) {
 				$get_store_location_url = home_url("/"); // Set it to 1 (checked) by default
 			}
+
+			$saved_alignment = get_option('model_store_alignment');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_alignment === false) {
+				$saved_alignment = 2; // Set it to 2 (checked) by default
+			}
 			
 			$output = '';
 
@@ -182,7 +188,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 			}
 			$output .= '</div>';
 
-			$output .= '<div class="model-modal"><div class="modal-content"><div class="preloader-container d-none"><span class="preloader"></span></div><span class="close">&times;</span><div class="search-results"></div></div></div>';
+			$output .= '<div class="model-modal '.(($saved_alignment == 1) ? "left" : (($saved_alignment == 3) ? "right" : "center")).'"><div class="modal-content"><div class="preloader-container d-none"><span class="preloader"></span></div><span class="close">&times;</span><div class="search-results"></div></div></div>';
 
 			// Output needs to be return
 			return $output;
@@ -318,7 +324,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 			// The Loop
 			if ( $the_query->have_posts() ) {
 				$output .= '<div class="model-container">
-				<div class="model-content swiper" data-breakpoint="'.$saved_breakpoint_feature.'" data-breakphone="'.$saved_select_breakpoint_phone.'" data-breaktablet="'.$saved_select_breakpoint_tablet.'" data-breakdesktop="'.$saved_select_breakpoint_desktop.'" data-breaklargescreen="'.$saved_select_breakpoint_largescreen.'" data-perview="'.$saved_select_slider_number.'" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="'.$saved_slider_autoplay_delay.'" data-loop="'.$saved_loop_feature.'" data-3d="'.$saved_3d_switch_button.'" data-spacebetween="'.$saved_space_between.'" data-center="'.$saved_slider_center.'" data-effect="'.$saved_select_slider_effect.'">
+				<div class="model-content swiper swiper-feature" data-breakpoint="'.$saved_breakpoint_feature.'" data-breakphone="'.$saved_select_breakpoint_phone.'" data-breaktablet="'.$saved_select_breakpoint_tablet.'" data-breakdesktop="'.$saved_select_breakpoint_desktop.'" data-breaklargescreen="'.$saved_select_breakpoint_largescreen.'" data-perview="'.$saved_select_slider_number.'" data-speed="'.$model_store_slider_speed.'" data-navigation="'.$saved_navigation_feature.'" data-pagination="'.$saved_pagination_feature.'" data-autoplay="'.$saved_autoplay_feature.'" data-autoplay-delay="'.$saved_slider_autoplay_delay.'" data-loop="'.$saved_loop_feature.'" data-3d="'.$saved_3d_switch_button.'" data-spacebetween="'.$saved_space_between.'" data-center="'.$saved_slider_center.'" data-effect="'.$saved_select_slider_effect.'">
 				<div class="swiper-wrapper">';
 				
 				while ( $the_query->have_posts() ) :
@@ -331,7 +337,7 @@ if ( ! class_exists( 'modelBase' ) ) {
 					$image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); // 'full' is the image size
 					// Set a default value for modal_store_enable_feature if it's not set yet
 					if ($image_url == '') {
-						$image_url = plugin_dir_url( __DIR__ ) . '../images/model-store-placeholder.png'; // Set it to 1 (checked) by default
+						$image_url = MS_ABSPATH .'/public/images/model-store-placeholder.png'; // Set it to 1 (checked) by default
 					}
 					$file_url = get_post_meta(get_the_ID(), '_model_store_file_upload_meta_key', true);
 					// Categories
@@ -366,11 +372,11 @@ if ( ! class_exists( 'modelBase' ) ) {
 									<div class="model-category">' . implode(' | ', $category_links) . '</div>
 									<div class="print-extra">
 										<ul>';
-											if($file_url){
-												$output .= '<li><a href="' . esc_url($file_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
-											}else{
-												$output .= '<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
-											}
+											// if($file_url){
+											// 	$output .= '<li><a href="' . esc_url($file_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											// }else{
+											// 	$output .= '<li><a href="' . esc_url($image_url) . '" download><i class="fa-solid fa-download"></i><span>5025</span></a></li>';
+											// }
 											if($saved_like_feature == 1){
 												 // Display the modal
 												$output .= '<li><a href=""><i class="fa-regular fa-heart"></i></a></li>';
@@ -409,14 +415,23 @@ if ( ! class_exists( 'modelBase' ) ) {
 		}
 
 		// Custom post type single page
-		// public function model_store_template($single_template) {
-		// 	global $post;
+		public function model_store_template($single_template) {
+			global $post;
 		
-		// 	if ($post->post_type == 'model_store') {
-		// 		$single_template = plugin_dir_url( __FILE__ ) . 'single-model_store.php';
-		// 	}
+			if ($post->post_type == 'model_store') {
+				$template_path = plugin_dir_path(__FILE__) . 'single-model_store.php';
+
+				// Check if the template file exists
+				if (file_exists($template_path)) {
+					return $template_path;
+				} else {
+					// Fallback to the default template if the custom template doesn't exist
+					return $single_template;
+				}
+			}
 		
-		// 	return $single_template;
-		// }
+			return $single_template;
+		}
+
 	}
 }

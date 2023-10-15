@@ -140,6 +140,9 @@ class Model_Store_Admin {
 			if ('model_store' === $post->post_type) {
 				wp_enqueue_media();
 				wp_enqueue_script('model-store-upload-script', plugin_dir_url( __FILE__ ) . 'js/model-file-upload.js', array('jquery'), null, true);
+				
+				// Include JavaScript to handle image uploads and updating the meta field
+				wp_enqueue_script('gallery-meta-box-script', plugin_dir_url( __FILE__ ) . 'js/gallery-meta-box.js', array('jquery'), null, true);
 			}
 		}
 	}

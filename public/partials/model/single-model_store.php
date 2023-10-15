@@ -1,27 +1,52 @@
 <?php
 /**
- * Template Name: Custom Single Template for Model Store
+ * The template for displaying all single model posts
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twenty_One
+ * @since Twenty Twenty-One 1.0
  */
 
-get_header(); ?>
+get_header();
 
-<div id="primary" class="content-area">
-    <main id="main" class="site-main">
+    /**
+     * woocommerce_before_main_content hook.
+     *
+     * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
+     * @hooked woocommerce_breadcrumb - 20
+     */
+    do_action( 'model_store_before_main_content' );
 
-        <?php while (have_posts()) : the_post(); ?>
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                <header class="entry-header">
-                    <h1 class="entry-title"><?php the_title(); ?></h1>
-                </header>
+        $is_pass_protected = post_password_required();
 
-                <div class="entry-content">
-                    <?php the_content(); ?>
-                </div>
-            </article>
-        <?php endwhile; ?>
+        if ( have_posts() && ! $is_pass_protected ) {
+            /* Start the Loop */
+            while ( have_posts() ) :
+                the_post();
+                //ms_get_template( 'content', 'single-model' );
+                $template_part_path = plugin_dir_path( dirname(__FILE__ ) ) . '/includes/template-parts/content/content-single-model.php';
+                // Check if the template file exists
+                if (file_exists($template_part_path)) {
+                    include($template_part_path);
+                }
+            endwhile; // End of the loop.
+        } elseif( $is_pass_protected ) {
+            echo get_the_password_form();
+        } else {
+            $template_part_path = plugin_dir_path( dirname(__FILE__ ) ) . '/includes/template-parts/content/content-none.php';
+            // Check if the template file exists
+            if (file_exists($template_part_path)) {
+                include($template_part_path);
+            }
+        }
 
-    </main>
-</div>
+    /**
+        * woocommerce_after_main_content hook.
+        *
+        * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
+        */
+    do_action( 'model_store_after_main_content' );
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+get_footer();

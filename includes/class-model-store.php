@@ -233,4 +233,153 @@ class Model_Store {
 		return $actions;
 	}
 
+
+/**
+ * Get template part (for templates like the shop-loop).
+ *
+ * WC_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
+ *
+ * @param mixed  $slug Template slug.
+ * @param string $name Template name (default: '').
+ */
+// function ms_get_template_part( $slug, $name = '' ) {
+// 	$cache_key = sanitize_key( implode( '-', array( 'template-part', $slug, $name, Constants::get_constant( 'WC_VERSION' ) ) ) );
+// 	$template  = (string) wp_cache_get( $cache_key, 'woocommerce' );
+
+// 	if ( ! $template ) {
+// 		if ( $name ) {
+// 			$template = WC_TEMPLATE_DEBUG_MODE ? '' : locate_template(
+// 				array(
+// 					"{$slug}-{$name}.php",
+// 					WC()->template_path() . "{$slug}-{$name}.php",
+// 				)
+// 			);
+
+// 			if ( ! $template ) {
+// 				$fallback = WC()->plugin_path() . "/templates/{$slug}-{$name}.php";
+// 				$template = file_exists( $fallback ) ? $fallback : '';
+// 			}
+// 		}
+
+// 		if ( ! $template ) {
+// 			// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/woocommerce/slug.php.
+// 			$template = WC_TEMPLATE_DEBUG_MODE ? '' : locate_template(
+// 				array(
+// 					"{$slug}.php",
+// 					WC()->template_path() . "{$slug}.php",
+// 				)
+// 			);
+// 		}
+
+// 		// Don't cache the absolute path so that it can be shared between web servers with different paths.
+// 		$cache_path = wc_tokenize_path( $template, wc_get_path_define_tokens() );
+
+// 		wc_set_template_cache( $cache_key, $cache_path );
+// 	} else {
+// 		// Make sure that the absolute path to the template is resolved.
+// 		$template = wc_untokenize_path( $template, wc_get_path_define_tokens() );
+// 	}
+
+// 	// Allow 3rd party plugins to filter template file from their plugin.
+// 	$template = apply_filters( 'wc_get_template_part', $template, $slug, $name );
+
+// 	if ( $template ) {
+// 		load_template( $template, false );
+// 	}
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * Init the package loader.
+	 *
+	 * @since 3.7.0
+	 */
+	// public static function init() {
+	// 	add_action( 'plugins_loaded', array( __CLASS__, 'on_init' ) );
+	// }
+
+	/**
+	 * Callback for WordPress init hook.
+	 */
+	// public static function on_init() {
+	// 	self::load_packages();
+	// }
+
+	/**
+	 * Checks a package exists by looking for it's directory.
+	 *
+	 * @param string $package Package name.
+	 * @return boolean
+	 */
+	// public static function package_exists( $package ) {
+	// 	return file_exists( dirname( __DIR__ ) . '/packages/' . $package );
+	// }
+
+	/**
+	 * Loads packages after plugins_loaded hook.
+	 *
+	 * Each package should include an init file which loads the package so it can be used by core.
+	 */
+	// protected static function load_packages() {
+	// 	// Initialize WooCommerce Admin.
+	// 	\Automattic\WooCommerce\Admin\Composer\Package::init();
+
+	// 	foreach ( self::$packages as $package_name => $package_class ) {
+	// 		if ( ! self::package_exists( $package_name ) ) {
+	// 			self::missing_package( $package_name );
+	// 			continue;
+	// 		}
+	// 		call_user_func( array( $package_class, 'init' ) );
+	// 	}
+	// }
+
+	// if ( ! function_exists( 'woocommerce_output_auth_header' ) ) {
+
+	// 	/**
+	// 	 * Output the Auth header.
+	// 	 */
+	// 	function woocommerce_output_auth_header() {
+	// 		wc_get_template( 'auth/header.php' );
+	// 	}
+	// }
+	
+	// if ( ! function_exists( 'woocommerce_output_auth_footer' ) ) {
+	
+	// 	/**
+	// 	 * Output the Auth footer.
+	// 	 */
+	// 	function woocommerce_output_auth_footer() {
+	// 		wc_get_template( 'auth/footer.php' );
+	// 	}
+	// }
+
+
+}
+
+// Plugin get template
+function ms_get_template( $slug, $name = '' ) {
+	$templates = array();
+
+	if ($name) {
+		$templates[] = "template-parts/{$slug}-{$name}.php";
+	}
+
+	$templates[] = "template-parts/{$slug}.php";
+
+	$template = locate_template($templates, false, false);
+
+	if ($template) {
+		load_template($template, false);
+	}
+
 }

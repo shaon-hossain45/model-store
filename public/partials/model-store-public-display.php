@@ -23,7 +23,7 @@ class Model_Store_Public_Display {
 	public function __construct() {
 
 		$this->public_display_load_dependencies();
-
+		$this->theme_support_includes();
 		// Slider base
 		if ( class_exists( 'modelBase' ) ) {
 			$modelBase = new modelBase();
@@ -59,8 +59,8 @@ class Model_Store_Public_Display {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/model/model-base.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/includes/search-model.php';
+		require_once plugin_dir_path( __FILE__ ) . 'model/model-base.php';
+		require_once plugin_dir_path( __FILE__ ) . 'model/search-model.php';
 	}
 
 	/**
@@ -76,6 +76,100 @@ class Model_Store_Public_Display {
 		add_shortcode( 'model_slider', array( $data, 'model_slider_shortcode' ) );
 
 		// single page template
-		//add_filter('single_template', array( $data, 'model_store_template') );
+		add_filter('single_template', array( $data, 'model_store_template') );
 	}
+
+
+
+	/**
+	 * See if theme/s is activate or not.
+	 *
+	 * @since 3.3.0
+	 * @param string|array $theme Theme name or array of theme names to check.
+	 * @return boolean
+	 */
+	public function ms_is_active_theme( $theme ) {
+		return is_array( $theme ) ? in_array( get_template(), $theme, true ) : get_template() === $theme;
+	}
+
+	/**
+	 * Is the site using a default WP theme?
+	 *
+	 * @return boolean
+	 */
+	public function ms_is_wp_default_theme_active() {
+		return $this->ms_is_active_theme(
+			array(
+				'twentytwentythree',
+				'twentytwentytwo',
+				'twentytwentyone',
+				'twentytwenty',
+				'twentynineteen',
+				'twentyseventeen',
+				'twentysixteen',
+				'twentyfifteen',
+				'twentyfourteen',
+				'twentythirteen',
+				'twentyeleven',
+				'twentytwelve',
+				'twentyten',
+			)
+		);
+	}
+	/**
+	 * Include classes for theme support.
+	 *
+	 * @since 3.3.0
+	 */
+	public function theme_support_includes() {
+		if ( $this->ms_is_wp_default_theme_active() ) {
+			switch ( get_template() ) {
+				case 'twentyten':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-ten.php';
+					break;
+				case 'twentyeleven':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-eleven.php';
+					break;
+				case 'twentytwelve':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-twelve.php';
+					break;
+				case 'twentythirteen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-thirteen.php';
+					break;
+				case 'twentyfourteen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-fourteen.php';
+					break;
+				case 'twentyfifteen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-fifteen.php';
+					break;
+				case 'twentysixteen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-sixteen.php';
+					break;
+				case 'twentyseventeen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-seventeen.php';
+					break;
+				case 'twentynineteen':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-nineteen.php';
+					break;
+				case 'twentytwenty':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-twenty.php';
+					break;
+				case 'twentytwentyone':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-twenty-one.php';
+					break;
+				case 'twentytwentytwo':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-twenty-two.php';
+					break;
+				case 'twentytwentythree':
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-twenty-twenty-three.php';
+					break;
+				default:
+					include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-default.php';
+					break;
+			}
+		}else{
+			include_once plugin_dir_path(__FILE__) . 'includes/theme-support/class-wc-default.php';
+		}
+	}
+
 }

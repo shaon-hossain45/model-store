@@ -107,7 +107,11 @@ class Model_Store_Public {
 		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
 			wp_enqueue_style( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'css/vendor/swiper-bundle.min.css', array(), '10.3.1', 'all' );
 		}
+		if (is_singular('model_store')) {
+			wp_enqueue_style( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'css/vendor/swiper-bundle.min.css', array(), '10.3.1', 'all' );
+		}
 
+		wp_enqueue_style( 'single-model', plugin_dir_url( __FILE__ ) . 'css/single-model.css', array(), null, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-public.css', array(), $this->version, 'all' );
 
 	}
@@ -136,6 +140,9 @@ class Model_Store_Public {
 		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
 			wp_enqueue_script( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'js/vendor/swiper-bundle.min.js', array( 'jquery' ), '10.3.1', true );
 		}
+		if (is_singular('model_store')) {
+			wp_enqueue_script( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'js/vendor/swiper-bundle.min.js', array( 'jquery' ), '10.3.1', true );
+		}
 		if (is_singular() && has_shortcode(get_post()->post_content, 'model_search')) {
 			wp_enqueue_script( 'model-search', plugin_dir_url( __FILE__ ) . 'js/model-search.js', array( 'jquery' ), null, true );
 			wp_enqueue_script( 'model-action', plugin_dir_url( __FILE__ ) . 'js/model-search-action.js', array( 'jquery' ), null, true );
@@ -146,6 +153,10 @@ class Model_Store_Public {
 		
 		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
 			wp_enqueue_script( 'slider-3d', plugin_dir_url( __FILE__ ) . 'js/swiper-slider.js', array( 'jquery' ), null, true );
+		}
+		if (is_singular('model_store')) {
+			wp_enqueue_script( 'slider-single', plugin_dir_url( __FILE__ ) . 'js/swiper-single.js', array( 'jquery' ), null, true );
+			wp_enqueue_script( 'tab-single', plugin_dir_url( __FILE__ ) . 'js/tab-single.js', array( 'jquery' ), null, true );
 		}
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-public.js', array( 'jquery' ), $this->version, false );
 	}
