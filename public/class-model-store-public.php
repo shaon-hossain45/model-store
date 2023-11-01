@@ -44,19 +44,18 @@ class Model_Store_Public {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string $plugin_name       The name of the plugin.
+	 * @param      string $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 
 		$this->public_load_dependencies();
 		if ( class_exists( 'Model_Store_Public_Display' ) ) {
 			new Model_Store_Public_Display();
 		}
-
 	}
 
 	/**
@@ -80,7 +79,7 @@ class Model_Store_Public {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/model-store-public-display.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/partials/model-store-public-display.php';
 	}
 
 	/**
@@ -101,19 +100,18 @@ class Model_Store_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		
+
 		wp_enqueue_style( 'awesome-icons', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' );
 
-		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_slider' ) ) {
 			wp_enqueue_style( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'css/vendor/swiper-bundle.min.css', array(), '10.3.1', 'all' );
 		}
-		if (is_singular('model_store')) {
+		if ( is_singular( 'model_store' ) ) {
 			wp_enqueue_style( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'css/vendor/swiper-bundle.min.css', array(), '10.3.1', 'all' );
 		}
 
 		wp_enqueue_style( 'single-model', plugin_dir_url( __FILE__ ) . 'css/single-model.css', array(), null, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/model-store-public.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -134,31 +132,59 @@ class Model_Store_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script( 'jQuery', plugin_dir_url( __FILE__ ) . 'js/vendor/jquery-3.7.1.min.js', array( '' ), '3.7.1', true );
 		
-		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+		wp_enqueue_script( 'jQuery', plugin_dir_url( __FILE__ ) . 'js/vendor/jquery-3.7.1.min.js', array( '' ), '3.7.1', true );
+
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_slider' ) ) {
 			wp_enqueue_script( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'js/vendor/swiper-bundle.min.js', array( 'jquery' ), '10.3.1', true );
 		}
-		if (is_singular('model_store')) {
+		if ( is_singular( 'model_store' ) ) {
 			wp_enqueue_script( 'swiper-slider', plugin_dir_url( __FILE__ ) . 'js/vendor/swiper-bundle.min.js', array( 'jquery' ), '10.3.1', true );
 		}
-		if (is_singular() && has_shortcode(get_post()->post_content, 'model_search')) {
+
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_search' ) ) {
 			wp_enqueue_script( 'model-search', plugin_dir_url( __FILE__ ) . 'js/model-search.js', array( 'jquery' ), null, true );
 			wp_enqueue_script( 'model-action', plugin_dir_url( __FILE__ ) . 'js/model-search-action.js', array( 'jquery' ), null, true );
 		}
 		// Localize the script to pass PHP data to JavaScript
 		$search_ajax_nonce = wp_create_nonce( 'search_nonce_key' );
-		wp_localize_script( 'model-search', 'search_object', array('ajax_url' => admin_url('admin-ajax.php'), 'action' => 'search_ajax_action', 'security' => $search_ajax_nonce) );
-		
-		if (is_singular() && has_shortcode(get_post()->post_content, 'model_slider')) {
+		wp_localize_script(
+			'model-search',
+			'search_object',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'action'   => 'search_ajax_action',
+				'security' => $search_ajax_nonce,
+			)
+		);
+
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_slider' ) ) {
 			wp_enqueue_script( 'slider-3d', plugin_dir_url( __FILE__ ) . 'js/swiper-slider.js', array( 'jquery' ), null, true );
 		}
-		if (is_singular('model_store')) {
+		if ( is_singular( 'model_store' ) ) {
 			wp_enqueue_script( 'slider-single', plugin_dir_url( __FILE__ ) . 'js/swiper-single.js', array( 'jquery' ), null, true );
 			wp_enqueue_script( 'tab-single', plugin_dir_url( __FILE__ ) . 'js/tab-single.js', array( 'jquery' ), null, true );
 		}
+
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_store' ) ) {
+			wp_enqueue_script( 'loadmore', plugin_dir_url( __FILE__ ) . 'js/load-more.js', array( 'jquery' ), null, true );
+		}
+		// Localize the script to pass PHP data to JavaScript
+		$loadmore_ajax_nonce = wp_create_nonce( 'loadmore_nonce_key' );
+		wp_localize_script(
+			'loadmore',
+			'ajax_object',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'action'   => 'loadmore_ajax_action',
+				'security' => $loadmore_ajax_nonce,
+			)
+		);
+
+		if ( is_singular() && has_shortcode( get_post()->post_content, 'model_store' ) ) {
+			wp_enqueue_script( 'collection', plugin_dir_url( __FILE__ ) . 'js/collection.js', array( 'jquery' ), null, true );
+		}
+
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/model-store-public.js', array( 'jquery' ), $this->version, false );
 	}
-
 }

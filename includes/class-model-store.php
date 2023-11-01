@@ -27,7 +27,7 @@
  * @subpackage Model_Store/includes
  * @author     Shaon Hossain <shaonhossain615@gmail.com>
  */
-class Model_Store {
+final class Model_Store {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -82,7 +82,7 @@ class Model_Store {
 		// plugin row action
 		add_filter('plugin_action_links', array( $this, 'add_custom_row_actions' ), 10, 4);
 
-
+		$this->define_constants();
 	}
 
 	/**
@@ -234,6 +234,44 @@ class Model_Store {
 	}
 
 
+
+
+	/**
+	 * Define WC Constants.
+	 */
+	private function define_constants() {
+		//$upload_dir = wp_upload_dir( null, false );
+
+		define( 'MS_ABSPATH', plugins_url( '', __FILE__ ) );
+
+
+		// $this->define( 'WC_ABSPATH', dirname( WC_PLUGIN_FILE ) . '/' );
+		// $this->define( 'WC_PLUGIN_BASENAME', plugin_basename( WC_PLUGIN_FILE ) );
+		// $this->define( 'WC_VERSION', $this->version );
+		// $this->define( 'WOOCOMMERCE_VERSION', $this->version );
+		// $this->define( 'WC_ROUNDING_PRECISION', 6 );
+		// $this->define( 'WC_DISCOUNT_ROUNDING_MODE', 2 );
+		// $this->define( 'WC_TAX_ROUNDING_MODE', 'yes' === get_option( 'woocommerce_prices_include_tax', 'no' ) ? 2 : 1 );
+		// $this->define( 'WC_DELIMITER', '|' );
+		// $this->define( 'WC_LOG_DIR', $upload_dir['basedir'] . '/wc-logs/' );
+		// $this->define( 'WC_SESSION_CACHE_GROUP', 'wc_session_id' );
+		// $this->define( 'WC_TEMPLATE_DEBUG_MODE', false );
+		// $this->define( 'WC_NOTICE_MIN_PHP_VERSION', '7.2' );
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Get template part (for templates like the shop-loop).
  *
@@ -367,19 +405,19 @@ class Model_Store {
 }
 
 // Plugin get template
-function ms_get_template( $slug, $name = '' ) {
-	$templates = array();
+// function ms_get_template( $slug, $name = '' ) {
+// 	$templates = array();
 
-	if ($name) {
-		$templates[] = "template-parts/{$slug}-{$name}.php";
-	}
+// 	if ($name) {
+// 		$templates[] = "template-parts/{$slug}-{$name}.php";
+// 	}
 
-	$templates[] = "template-parts/{$slug}.php";
+// 	$templates[] = "template-parts/{$slug}.php";
 
-	$template = locate_template($templates, false, false);
+// 	$template = locate_template($templates, false, false);
 
-	if ($template) {
-		load_template($template, false);
-	}
+// 	if ($template) {
+// 		load_template($template, false);
+// 	}
 
-}
+// }

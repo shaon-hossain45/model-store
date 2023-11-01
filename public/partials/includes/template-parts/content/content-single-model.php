@@ -61,10 +61,14 @@
             <div class="model-header d-flex align-items-start mb-2">
                 <h1 class="model-name mb-0">Magsafe charger stand for iPhone</h1>
             </div>
-
-
-
             
+<div class="reviews-rating">
+    <div class="revauto">
+        <span class="rating rate-9"></span>
+        <span class="ratings-count">21 reviews</span>
+    </div>
+</div>
+
             <div class="user-info">
                 <a class="user-card" href="#">
                     <div class="user-point">
@@ -85,14 +89,11 @@
             </div>
 
 
-
-
-            <div class="interaction-panel print-type" style="display: none;">
+            <div class="interaction-panel">
                 <div class="button-row">
-                    <button class="btn btn-full like-btn has-label"><i _ngcontent-prusa-front-app-c132="" class="fas fa-heart"></i><span _ngcontent-prusa-front-app-c233=""> Liked </span></button>
-                    <button class="btn btn-full like-btn has-label"><i _ngcontent-prusa-front-app-c132="" class="fas fa-heart"></i><span _ngcontent-prusa-front-app-c233=""> Liked </span></button>
-                    <button class="btn btn-full like-btn has-label"><i _ngcontent-prusa-front-app-c132="" class="fas fa-heart"></i><span _ngcontent-prusa-front-app-c233=""> Liked </span></button>
-                    <button class="btn btn-full like-btn has-label"><i _ngcontent-prusa-front-app-c132="" class="fas fa-heart"></i><span _ngcontent-prusa-front-app-c233=""> Liked </span></button>
+                    <button class="btn"><i class="fas fa-heart"></i><span> Like </span></button>
+                    <button class="btn"><i class="fas fa-bookmark"></i><span> Bookmark </span></button>
+                    <button class="btn"><i class="fa fa-share"></i><span> Share </span></button>
                 </div>
             </div>
 

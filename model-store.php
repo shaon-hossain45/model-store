@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Model Store
  * Plugin URI:        https://https://github.com/shaon-hossain45/model-store
- * Description:       Model store for 3D printing
+ * Description:       The best WordPress plugin that helps you upload and download anything. Beautifully.
  * Version:           1.0.0
  * Author:            Shaon Hossain
  * Author URI:        https://https://github.com/shaon-hossain45/
@@ -36,7 +36,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'MODEL_STORE_VERSION', '1.0.0' );
-define('MS_ABSPATH', plugins_url('', __FILE__));
 
 /**
  * The code that runs during plugin activation.

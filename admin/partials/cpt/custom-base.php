@@ -90,7 +90,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 				'exclude_from_search' => false,
 				'publicly_queryable'  => true,
 				'capability_type'     => 'post',
-				// 'rewrite'             => array('slug' => 'model'),
+				'rewrite'             => array('slug' => 'model'),
 			);
 			register_post_type( 'model_store', $args );
 
@@ -189,7 +189,7 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			$saved_url = get_option('model_store_url');
 			// Set a default value for modal_store_enable_feature if it's not set yet
 			if ($saved_url === false) {
-				$saved_url = home_url("/"); // Set it to 1 (checked) by default
+				$saved_url = home_url("/model-store/"); // Set it to 1 (checked) by default
 			}
 
 			// Extra Buttons
@@ -202,6 +202,27 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			// Set a default value for modal_store_enable_feature if it's not set yet
 			if ($saved_collect_feature === false) {
 				$saved_collect_feature = 1; // Set it to 1 (checked) by default
+			}
+			
+			$saved_model_collection = get_option('model_collection');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_model_collection === false) {
+				$saved_model_collection = 1; // Set it to 0 (checked) by default
+			}
+			$saved_quickview_feature = get_option('model_store_quickview_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_quickview_feature === false) {
+				$saved_quickview_feature = 1; // Set it to 1 (checked) by default
+			}
+			$saved_tooltip_feature = get_option('model_store_tooltip_feature');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_tooltip_feature === false) {
+				$saved_tooltip_feature = 1; // Set it to 1 (checked) by default
+			}
+			$saved_template = get_option('model_template');
+			// Set a default value for modal_store_enable_feature if it's not set yet
+			if ($saved_template === false) {
+				$saved_template = 1; // Set it to 1 (checked) by default
 			}
 
 			$saved_alignment = get_option('model_store_alignment');
@@ -345,7 +366,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 							<fieldset>
 								<legend class="screen-reader-text"><span>Model Store Number</span></legend>
 								<select id="model_store_number" name="model_store_number">
-									<option value="0" ' . selected( $saved_select_number, 0, false ) . '>Select an option</option>
 									<option value="1" ' . selected( $saved_select_number, 1, false ) . '>1</option>
 									<option value="2" ' . selected( $saved_select_number, 2, false ) . '>2</option>
 									<option value="3" ' . selected( $saved_select_number, 3, false ) . '>3</option>
@@ -362,7 +382,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 							<fieldset>
 								<legend class="screen-reader-text"><span>Model Related Number</span></legend>
 								<select id="model_related_number" name="model_related_number">
-									<option value="0" ' . selected( $saved_related_number, 0, false ) . '>Select an option</option>
 									<option value="3" ' . selected( $saved_related_number, 3, false ) . '>3</option>
 									<option value="4" ' . selected( $saved_related_number, 4, false ) . '>4</option>
 									<option value="5" ' . selected( $saved_related_number, 5, false ) . '>5</option>
@@ -394,6 +413,19 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						</td>
 					</tr>
 					<tr>
+						<th scope="row"><label for="model_template">Model Template</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Template</span></legend>
+								<select id="model_template" name="model_template">
+									<option value="1" ' . selected( $saved_template, 1, false ) . '>Template 1</option>
+									<option value="2" ' . selected( $saved_template, 2, false ) . '>Template 2</option>
+									<option value="3" ' . selected( $saved_template, 3, false ) . '>Template 3</option>
+								</select>
+							<fieldset>
+						</td>
+					</tr>
+					<tr>
 						<th scope="row"><label for="model_store_like_feature">Like Button</label></th>
 						<td>
 							<fieldset>
@@ -407,7 +439,37 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 						<td>
 							<fieldset>
 								<legend class="screen-reader-text"><span>Collect Button</span></legend>
-								<label for="model_store_collect_feature"><input type="checkbox" id="model_store_collect_feature" name="model_store_collect_feature" value="1" ' . checked($saved_collect_feature, 1, false) . ' />Enable Feature</label>
+								<label for="model_store_collect_feature"><input type="checkbox" id="model_store_collect_feature" name="model_store_collect_feature" data-onload="' . esc_js('storeCollection') . '" onchange="fieldVisibility(event, \'' . esc_js('storeCollection') . '\')" value="1" ' . checked($saved_collect_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr data-hidden="storeCollection" style="display: none;">
+						<th scope="row"><label for="model_collection">Model Collection</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Model Collection</span></legend>
+								<select id="model_collection" name="model_collection">
+									<option value="1" ' . selected( $saved_model_collection, 1, false ) . '>Basic</option>
+									<option value="2" ' . selected( $saved_model_collection, 2, false ) . '>Modal</option>
+								</select>
+							<fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_quickview_feature">Quick View</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Quick View</span></legend>
+								<label for="model_store_quickview_feature"><input type="checkbox" id="model_store_quickview_feature" name="model_store_quickview_feature" value="1" ' . checked($saved_quickview_feature, 1, false) . ' />Enable Feature</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="model_store_tooltip_feature">Tooltip</label></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span>Tooltip</span></legend>
+								<label for="model_store_tooltip_feature"><input type="checkbox" id="model_store_tooltip_feature" name="model_store_tooltip_feature" value="1" ' . checked($saved_tooltip_feature, 1, false) . ' />Enable Feature</label>
 							</fieldset>
 						</td>
 					</tr>
@@ -447,7 +509,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 									<label for="model_store_breakpoint_phone">Phone</label>
 									<br />
 									<select id="model_store_breakpoint_phone" name="model_store_breakpoint_phone">
-										<option value="0" ' . selected( $saved_select_breakpoint_phone, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_phone, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_phone, 2, false ) . '>2</option>
 										<option value="3" ' . selected( $saved_select_breakpoint_phone, 3, false ) . '>3</option>
@@ -459,7 +520,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 									<label for="model_store_breakpoint_tablet">Tablet</label>
 									<br />
 									<select id="model_store_breakpoint_tablet" name="model_store_breakpoint_tablet">
-										<option value="0" ' . selected( $saved_select_breakpoint_tablet, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_tablet, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_tablet, 2, false ) . '>2</option>
 										<option value="3" ' . selected( $saved_select_breakpoint_tablet, 3, false ) . '>3</option>
@@ -471,7 +531,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 									<label for="model_store_breakpoint_desktop">Desktop</label>
 									<br />
 									<select id="model_store_breakpoint_desktop" name="model_store_breakpoint_desktop">
-										<option value="0" ' . selected( $saved_select_breakpoint_desktop, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_desktop, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_desktop, 2, false ) . '>2</option>
 										<option value="3" ' . selected( $saved_select_breakpoint_desktop, 3, false ) . '>3</option>
@@ -483,7 +542,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 									<label for="model_store_breakpoint_largescreen">Large Screen</label>
 									<br />
 									<select id="model_store_breakpoint_largescreen" name="model_store_breakpoint_largescreen">
-										<option value="0" ' . selected( $saved_select_breakpoint_largescreen, 0, false ) . '>Select an option</option>
 										<option value="1" ' . selected( $saved_select_breakpoint_largescreen, 1, false ) . '>1</option>
 										<option value="2" ' . selected( $saved_select_breakpoint_largescreen, 2, false ) . '>2</option>
 										<option value="3" ' . selected( $saved_select_breakpoint_largescreen, 3, false ) . '>3</option>
@@ -500,7 +558,6 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Number</span></legend>
 								<select id="model_store_slider_number" name="model_store_slider_number">
-									<option value="0" ' . selected( $saved_select_slider_number, 0, false ) . '>Select an option</option>
 									<option value="1" ' . selected( $saved_select_slider_number, 1, false ) . '>1</option>
 									<option value="2" ' . selected( $saved_select_slider_number, 2, false ) . '>2</option>
 									<option value="3" ' . selected( $saved_select_slider_number, 3, false ) . '>3</option>
@@ -573,8 +630,8 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 							<fieldset>
 								<legend class="screen-reader-text"><span>Slider Effect</span></legend>
 								<select id="model_store_slider_effect" name="model_store_slider_effect" data-onload="' . esc_js('effect') .'" onchange="fieldVisibilitySelect(event,  \'' . esc_js('effect') . '\')">
-									<option value="0" ' . selected( $saved_select_slider_effect, 0, false ) . '>Select an option</option>
-									<option value="1" ' . selected( $saved_select_slider_effect, 1, false ) . '>Coverflow Effect</option>
+									<option value="0" ' . selected( $saved_select_slider_effect, 0, false ) . '>Slider</option>
+									<option value="1" ' . selected( $saved_select_slider_effect, 1, false ) . '>Coverflow</option>
 								</select>
 							</fieldset>
 						</td>
@@ -613,9 +670,12 @@ if ( ! class_exists( 'CptBaseSetup' ) ) {
 			// Extra Buttons
 			register_setting('model_store_settings_group', 'model_store_like_feature', 'absint');
 			register_setting('model_store_settings_group', 'model_store_collect_feature', 'absint');
+			register_setting('model_store_settings_group', 'model_collection', 'absint');
 			register_setting('model_store_settings_group', 'model_store_alignment', 'absint');
 			register_setting('model_store_settings_group', 'model_store_number', 'absint');
 			register_setting('model_store_settings_group', 'model_related_number', 'absint');
+			register_setting('model_store_settings_group', 'model_template', 'absint');
+			
 			// Slider Options
 			register_setting('model_store_settings_group', 'model_store_slider_speed', 'absint');
 			register_setting('model_store_settings_group', 'model_store_navigation_feature', 'absint');
