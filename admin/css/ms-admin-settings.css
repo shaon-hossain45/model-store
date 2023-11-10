@@ -1,0 +1,304 @@
+/* Style for the radio buttons and labels */
+.model-alignment {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+.form-table td fieldset .model-alignment input[type="radio"]{
+    appearance: none;
+    display: none;
+}
+.form-table td fieldset .model-alignment label{
+    box-shadow: 0 0 0 transparent;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    background-color: #fff;
+    color: #2c3338;
+    padding: 0 8px;
+    line-height: 2 !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.form-table td fieldset .model-alignment .model-part{
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+.form-table td fieldset .model-alignment .model-part:first-child{
+    margin-left: 0px;
+}
+.form-table td fieldset .model-alignment .model-part:last-child{
+    margin-right: 0px;
+}
+.form-table td fieldset .model-alignment input[type="radio"]:checked + label{
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.form-table td .model-alignment .breakpoint-part{
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+.form-table td .model-alignment .breakpoint-part:first-child{
+    margin-left: 0px;
+}
+.form-table td .model-alignment .breakpoint-part:last-child{
+    margin-right: 0px;
+}
+
+/* Switch Button */
+
+.model-switchbox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.model-switchpart {
+    position: relative;
+}
+.form-table td fieldset .model-switchbox input[type="checkbox"]{
+    appearance: none;
+    display: none;
+}
+/* .form-table td fieldset .model-switchbox label{
+    box-shadow: 0 0 0 transparent;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    background-color: #fff;
+    color: #2c3338;
+    padding: 0 8px;
+    line-height: 2 !important;
+} */
+.model-switchbox label {
+    float: left;
+    cursor: pointer;
+    position: relative;
+    width: 60px;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #ed6f6f;
+    user-select: none;
+    -webkit-user-select: none;
+}
+/* .form-table td fieldset .model-switchbox input[type="radio"]:checked + label{
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+} */
+
+
+.form-table td fieldset .model-switchbox .switch-on, .form-table td fieldset .model-switchbox .switch-off {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 32px;
+    font-size: 11px;
+    line-height: 26px;
+    font-weight: 500;
+    font-style: normal;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0;
+    transition: all .1s;
+    cursor: pointer;
+}
+.form-table td fieldset .model-switchbox .switch-on {
+    padding-right: 28px;
+}
+
+.form-table td fieldset .model-switchbox .switch-off {
+    padding-left: 28px;
+    opacity: 1;
+}
+
+.model-switchbox input[type="checkbox"]:checked + label {
+    background: #4fb845;
+}
+.model-switchbox input[type="checkbox"]:checked + label .switch-on {
+    opacity: 1;
+}
+
+.model-switchpart .switch-ball {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 18px;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: all .1s;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.15);
+}
+.model-switchbox input[type="checkbox"]:checked + label .switch-ball {
+    left: 100%;
+    margin-left: -28px;
+}
+.model-switchpart + span {
+    margin-left: 4px;
+}
+
+/* MS settings */
+#wpcontent {
+    padding-left: 0px;
+}
+.wrap {
+    margin: 0px;
+    background-color: #F1F4FA;
+}
+.background__greyBg {
+    background-color: #F1F4FA;
+}
+.pt50 {
+    padding-top: 50px;
+}
+.py50{
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+.px30{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.eael-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 50%;
+}
+
+@media screen and (max-width: 767px) {
+    .eael-container {
+        flex-direction: column;
+        max-width: 100%;
+    }
+}
+.template__wrapper .form-table th {
+    width: 200px;
+}
+@media screen and (max-width: 782px){
+    .form-table th {
+        padding-bottom: 10px;
+    }
+}
+.mb45 {
+    margin-right: 45px;
+}
+.eael-main__tab {
+    width: 160px;
+}
+@media screen and (max-width: 767px) {
+    .eael-main__tab {
+        width: 100%;
+    }
+}
+.eael-main__tab .tab__menu {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 20px 8px;
+    background: #E1E6F4;
+    border-radius: 4px;
+    margin: 0px;
+}
+@media screen and (max-width: 767px) {
+    .eael-main__tab .tab__menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+.eael-main__tab .tab__menu .tab__list {
+    margin-bottom: inherit;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.eael-main__tab .tab__menu .tab__list .tab__item {
+    font-size: 16px;
+    font-weight: 500;
+    color: #041137;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.eael-main__tab .tab__menu .tab__list .tab__item i {
+    color: #8F9BBD;
+    margin-right: 10px;
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+}
+.eael-main__tab .tab__menu .tab__list.active .tab__item {
+    color: #5E2EFF;
+    background: #ffffff;
+    -webkit-box-shadow: 0px 6px 6px rgba(53, 66, 134, 0.1);
+    box-shadow: 0px 6px 6px rgba(53, 66, 134, 0.1);
+}
+.eael-admin-setting-tabs {
+    flex-grow: 1;
+}
+.eael-admin-setting-tab.active {
+    display: block;
+}
+.eael-admin-setting-tab {
+    display: none;
+}
+.template__wrapper table {
+    margin-top: 0px;
+}
+.template__wrapper table tr {
+    border-bottom: 1px solid rgba(51, 62, 119, 0.12);
+    padding: 10px 0px 10px 0px;
+    min-height: 45px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 7px;
+}
+.template__wrapper table td {
+    margin-bottom: 0px;
+}
+
+.template__wrapper .submit input[type="submit"] {
+    background: #5E2EFF;
+    color: white;
+    -webkit-box-shadow: 0px 1px 2px rgba(94, 46, 255, 0.1);
+    box-shadow: 0px 1px 2px rgba(94, 46, 255, 0.1);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+    -webkit-transition-property: background, color, box-shadow, border;
+    -webkit-transition-property: background, color, border, -webkit-box-shadow;
+    transition-property: background, color, border, -webkit-box-shadow;
+    transition-property: background, color, box-shadow, border;
+    transition-property: background, color, box-shadow, border, -webkit-box-shadow;
+    text-align: center;
+    padding: 11px 17px;
+    line-height: 1;
+    border: 1px solid #5E2EFF;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+.form-table td input[type="number"] {
+    width: 150px;
+}

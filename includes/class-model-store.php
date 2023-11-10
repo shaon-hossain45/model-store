@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -12,6 +11,10 @@
  * @package    Model_Store
  * @subpackage Model_Store/includes
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
  * The core plugin class.
@@ -74,15 +77,34 @@ final class Model_Store {
 		}
 		$this->plugin_name = 'model-store';
 
+		$this->define_constants();
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+	}
 
-		// plugin row action
-		add_filter('plugin_action_links', array( $this, 'add_custom_row_actions' ), 10, 4);
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @param string      $name  Constant name.
+	 * @param string|bool $value Constant value.
+	 */
+	private function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	}
 
-		$this->define_constants();
+	/**
+	 * Define MS Constants.
+	 */
+	private function define_constants() {
+		// $upload_dir = wp_upload_dir( null, false );
+
+		$this->define( 'MS_ABSPATH', dirname( MS_PLUGIN_FILE ) . '/' );
+		$this->define( 'MS_VERSION', $this->version );
+		//$this->define( 'WC_TAX_ROUNDING_MODE', 'yes' === get_option( 'woocommerce_prices_include_tax', 'no' ) ? 2 : 1 );
 	}
 
 	/**
@@ -107,27 +129,31 @@ final class Model_Store {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-model-store-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/helper/class-ms-helper-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-model-store-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/helper/class-ms-helper-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-model-store-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-ms-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-model-store-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-ms-public.php';
 
-		$this->loader = new Model_Store_Loader();
+		/**
+		 * The class responsible for orchestrating class autoload
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-ms-autoloader.php';
 
+		$this->loader = new MS_Helper_Loader();
 	}
 
 	/**
@@ -141,10 +167,9 @@ final class Model_Store {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Model_Store_i18n();
+		$plugin_i18n = new MS_Helper_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -156,11 +181,13 @@ final class Model_Store {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Model_Store_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new MS_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		// Plugin row actions.
+		$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'plugin_row_actions', 10, 4 );
 	}
 
 	/**
@@ -172,11 +199,10 @@ final class Model_Store {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Model_Store_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new MS_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
 	}
 
 	/**
@@ -203,7 +229,7 @@ final class Model_Store {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Model_Store_Loader    Orchestrates the hooks of the plugin.
+	 * @return    MS_Helper_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -218,206 +244,4 @@ final class Model_Store {
 	public function get_version() {
 		return $this->version;
 	}
-
-	
-	// Plugin row actions
-	public function add_custom_row_actions($actions, $plugin_file, $plugin_data, $context) {
-		if ( is_plugin_active($plugin_file) && basename( dirname(plugin_dir_path( __FILE__ )) ) . '/model-store.php' === $plugin_file ) {
-			// Add your custom row actions for active plugins
-			$settings_page_url = admin_url('edit.php?post_type=model_store&page=model-store-settings');
-			$support_url = "https://www.modelstore.com/support/";
-
-			$actions['settings'] = '<a href="' . esc_url($settings_page_url) . '">Settings</a>';
-			$actions['support'] = '<a href="' . esc_url($support_url) . '">Support</a>';
-		}
-		return $actions;
-	}
-
-
-
-
-	/**
-	 * Define WC Constants.
-	 */
-	private function define_constants() {
-		//$upload_dir = wp_upload_dir( null, false );
-
-		define( 'MS_ABSPATH', plugins_url( '', __FILE__ ) );
-
-
-		// $this->define( 'WC_ABSPATH', dirname( WC_PLUGIN_FILE ) . '/' );
-		// $this->define( 'WC_PLUGIN_BASENAME', plugin_basename( WC_PLUGIN_FILE ) );
-		// $this->define( 'WC_VERSION', $this->version );
-		// $this->define( 'WOOCOMMERCE_VERSION', $this->version );
-		// $this->define( 'WC_ROUNDING_PRECISION', 6 );
-		// $this->define( 'WC_DISCOUNT_ROUNDING_MODE', 2 );
-		// $this->define( 'WC_TAX_ROUNDING_MODE', 'yes' === get_option( 'woocommerce_prices_include_tax', 'no' ) ? 2 : 1 );
-		// $this->define( 'WC_DELIMITER', '|' );
-		// $this->define( 'WC_LOG_DIR', $upload_dir['basedir'] . '/wc-logs/' );
-		// $this->define( 'WC_SESSION_CACHE_GROUP', 'wc_session_id' );
-		// $this->define( 'WC_TEMPLATE_DEBUG_MODE', false );
-		// $this->define( 'WC_NOTICE_MIN_PHP_VERSION', '7.2' );
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Get template part (for templates like the shop-loop).
- *
- * WC_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
- *
- * @param mixed  $slug Template slug.
- * @param string $name Template name (default: '').
- */
-// function ms_get_template_part( $slug, $name = '' ) {
-// 	$cache_key = sanitize_key( implode( '-', array( 'template-part', $slug, $name, Constants::get_constant( 'WC_VERSION' ) ) ) );
-// 	$template  = (string) wp_cache_get( $cache_key, 'woocommerce' );
-
-// 	if ( ! $template ) {
-// 		if ( $name ) {
-// 			$template = WC_TEMPLATE_DEBUG_MODE ? '' : locate_template(
-// 				array(
-// 					"{$slug}-{$name}.php",
-// 					WC()->template_path() . "{$slug}-{$name}.php",
-// 				)
-// 			);
-
-// 			if ( ! $template ) {
-// 				$fallback = WC()->plugin_path() . "/templates/{$slug}-{$name}.php";
-// 				$template = file_exists( $fallback ) ? $fallback : '';
-// 			}
-// 		}
-
-// 		if ( ! $template ) {
-// 			// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/woocommerce/slug.php.
-// 			$template = WC_TEMPLATE_DEBUG_MODE ? '' : locate_template(
-// 				array(
-// 					"{$slug}.php",
-// 					WC()->template_path() . "{$slug}.php",
-// 				)
-// 			);
-// 		}
-
-// 		// Don't cache the absolute path so that it can be shared between web servers with different paths.
-// 		$cache_path = wc_tokenize_path( $template, wc_get_path_define_tokens() );
-
-// 		wc_set_template_cache( $cache_key, $cache_path );
-// 	} else {
-// 		// Make sure that the absolute path to the template is resolved.
-// 		$template = wc_untokenize_path( $template, wc_get_path_define_tokens() );
-// 	}
-
-// 	// Allow 3rd party plugins to filter template file from their plugin.
-// 	$template = apply_filters( 'wc_get_template_part', $template, $slug, $name );
-
-// 	if ( $template ) {
-// 		load_template( $template, false );
-// 	}
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 * Init the package loader.
-	 *
-	 * @since 3.7.0
-	 */
-	// public static function init() {
-	// 	add_action( 'plugins_loaded', array( __CLASS__, 'on_init' ) );
-	// }
-
-	/**
-	 * Callback for WordPress init hook.
-	 */
-	// public static function on_init() {
-	// 	self::load_packages();
-	// }
-
-	/**
-	 * Checks a package exists by looking for it's directory.
-	 *
-	 * @param string $package Package name.
-	 * @return boolean
-	 */
-	// public static function package_exists( $package ) {
-	// 	return file_exists( dirname( __DIR__ ) . '/packages/' . $package );
-	// }
-
-	/**
-	 * Loads packages after plugins_loaded hook.
-	 *
-	 * Each package should include an init file which loads the package so it can be used by core.
-	 */
-	// protected static function load_packages() {
-	// 	// Initialize WooCommerce Admin.
-	// 	\Automattic\WooCommerce\Admin\Composer\Package::init();
-
-	// 	foreach ( self::$packages as $package_name => $package_class ) {
-	// 		if ( ! self::package_exists( $package_name ) ) {
-	// 			self::missing_package( $package_name );
-	// 			continue;
-	// 		}
-	// 		call_user_func( array( $package_class, 'init' ) );
-	// 	}
-	// }
-
-	// if ( ! function_exists( 'woocommerce_output_auth_header' ) ) {
-
-	// 	/**
-	// 	 * Output the Auth header.
-	// 	 */
-	// 	function woocommerce_output_auth_header() {
-	// 		wc_get_template( 'auth/header.php' );
-	// 	}
-	// }
-	
-	// if ( ! function_exists( 'woocommerce_output_auth_footer' ) ) {
-	
-	// 	/**
-	// 	 * Output the Auth footer.
-	// 	 */
-	// 	function woocommerce_output_auth_footer() {
-	// 		wc_get_template( 'auth/footer.php' );
-	// 	}
-	// }
-
-
 }
-
-// Plugin get template
-// function ms_get_template( $slug, $name = '' ) {
-// 	$templates = array();
-
-// 	if ($name) {
-// 		$templates[] = "template-parts/{$slug}-{$name}.php";
-// 	}
-
-// 	$templates[] = "template-parts/{$slug}.php";
-
-// 	$template = locate_template($templates, false, false);
-
-// 	if ($template) {
-// 		load_template($template, false);
-// 	}
-
-// }

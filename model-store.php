@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The plugin bootstrap file
  *
@@ -18,7 +17,7 @@
  * Description:       The best WordPress plugin that helps you upload and download anything. Beautifully.
  * Version:           1.0.0
  * Author:            Shaon Hossain
- * Author URI:        https://https://github.com/shaon-hossain45/
+ * Author URI:        https://https://github.com/shaon-hossain45//
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       model-store
@@ -26,8 +25,19 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+defined( 'ABSPATH' ) || exit;
+defined( 'WPINC' ) || die;
+
+// if ( ! defined( 'WPINC' ) ) {
+// 	die;
+// }
+
+if ( ! defined( 'MS_PLUGIN_FILE' ) ) {
+	define( 'MS_PLUGIN_FILE', __FILE__ );
+}
+
+if ( ! defined( 'MS_PLUGIN_DIR' ) ) {
+	define( 'MS_PLUGIN_DIR', __DIR__ );
 }
 
 /**
@@ -42,8 +52,8 @@ define( 'MODEL_STORE_VERSION', '1.0.0' );
  * This action is documented in includes/class-model-store-activator.php
  */
 function activate_model_store() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-model-store-activator.php';
-	Model_Store_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/helper/class-ms-helper-activator.php';
+	MS_Helper_Activator::activate();
 }
 
 /**
@@ -51,8 +61,8 @@ function activate_model_store() {
  * This action is documented in includes/class-model-store-deactivator.php
  */
 function deactivate_model_store() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-model-store-deactivator.php';
-	Model_Store_Deactivator::deactivate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/helper/class-ms-helper-deactivator.php';
+	MS_Helper_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_model_store' );
@@ -62,7 +72,9 @@ register_deactivation_hook( __FILE__, 'deactivate_model_store' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-model-store.php';
+if ( ! class_exists( 'Model_Store', false ) ) {
+	require plugin_dir_path( __FILE__ ) . 'includes/class-model-store.php';
+}
 
 /**
  * Begins execution of the plugin.
@@ -77,6 +89,5 @@ function run_model_store() {
 
 	$plugin = new Model_Store();
 	$plugin->run();
-
 }
 run_model_store();
